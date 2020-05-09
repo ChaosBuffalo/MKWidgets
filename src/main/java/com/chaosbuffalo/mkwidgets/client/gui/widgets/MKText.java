@@ -3,7 +3,7 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
-public class MKText extends MKWidgetBase<MKText> {
+public class MKText extends MKWidgetBase {
 
     public String text;
     private FontRenderer fontRenderer;
@@ -83,7 +83,7 @@ public class MKText extends MKWidgetBase<MKText> {
     }
 
     @Override
-    public IMKWidget<MKText> setWidth(int newWidth) {
+    public IMKWidget setWidth(int newWidth) {
         super.setWidth(newWidth);
         updateLabel();
         return this;

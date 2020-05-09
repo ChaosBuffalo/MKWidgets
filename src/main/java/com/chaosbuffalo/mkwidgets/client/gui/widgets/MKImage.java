@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class MKImage extends MKWidgetBase<MKImage> {
+public class MKImage extends MKWidgetBase {
     private ResourceLocation imageLoc;
     private int texU;
     private int texV;

@@ -1,6 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.constraints;
 
-import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKLayout;
+import com.chaosbuffalo.mkwidgets.client.gui.layouts.IMKLayout;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
 public class LayoutRelativeHeightConstraint extends BaseConstraint {
@@ -12,7 +12,7 @@ public class LayoutRelativeHeightConstraint extends BaseConstraint {
     }
 
     @Override
-    public void applyConstraint(IMKLayout<?> layout, IMKWidget<?> widget, int widgetIndex) {
+    public void applyConstraint(IMKLayout layout, IMKWidget widget, int widgetIndex) {
         float availableSpace = layout.getHeight() - layout.getMarginTop() - layout.getMarginBot();
         widget.setHeight(Math.round(availableSpace * heightScale));
     }

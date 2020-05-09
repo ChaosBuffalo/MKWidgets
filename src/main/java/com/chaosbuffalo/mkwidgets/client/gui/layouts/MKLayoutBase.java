@@ -1,13 +1,15 @@
-package com.chaosbuffalo.mkwidgets.client.gui.widgets;
+package com.chaosbuffalo.mkwidgets.client.gui.layouts;
 
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.IConstraint;
+import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
+import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKWidgetBase;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBase<T> implements IMKLayout<T> {
+public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     private int paddingLeft;
     private int paddingRight;
     private int paddingTop;
@@ -32,7 +34,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     public void recomputeChildren() {
         setupLayoutStartState();
         int i = 0;
-        for (IMKWidget<?> child : getChildren()) {
+        for (IMKWidget child : getChildren()) {
             doLayout(child, i);
             i++;
         }
@@ -40,7 +42,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public void addConstraintToWidget(IConstraint constraint, IMKWidget<?> widget) {
+    public void addConstraintToWidget(IConstraint constraint, IMKWidget widget) {
         if (!constraints.containsKey(widget.getId())){
             constraints.put(widget.getId(), new ArrayList<>());
         }
@@ -49,14 +51,14 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public void removeConstraintFromWidget(IConstraint constraint, IMKWidget<?> widget) {
+    public void removeConstraintFromWidget(IConstraint constraint, IMKWidget widget) {
         if (constraints.containsKey(widget.getId())){
             ArrayList<IConstraint> widgetConstraints = constraints.get(widget.getId());
             widgetConstraints.removeIf((con) -> con.getConstraintID().equals(constraint.getConstraintID()));
         }
     }
 
-    public void applyConstraints(IMKWidget<?> widget, int widgetIndex){
+    public void applyConstraints(IMKWidget widget, int widgetIndex){
         if (constraints.containsKey(widget.getId())){
             ArrayList<IConstraint> widgetConstraints = constraints.get(widget.getId());
             for (IConstraint constraint : widgetConstraints){
@@ -67,13 +69,13 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public void removeWidget(IMKWidget<?> widget) {
+    public void removeWidget(IMKWidget widget) {
         super.removeWidget(widget);
         constraints.remove(widget.getId());
     }
 
     @Override
-    public void clearWidgetConstraints(IMKWidget<?> widget) {
+    public void clearWidgetConstraints(IMKWidget widget) {
         if (constraints.containsKey(widget.getId())){
             constraints.remove(widget.getId());
         }
@@ -101,7 +103,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
         preDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         draw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         int i = 0;
-        for (IMKWidget<?> child : getChildren()) {
+        for (IMKWidget child : getChildren()) {
             if (child.isVisible()) {
                 child.drawWidget(mc, mouseX, mouseY, partialTicks);
             }
@@ -113,7 +115,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
 
 
     @Override
-    public IMKLayout<T> setMarginTop(int value) {
+    public IMKLayout setMarginTop(int value) {
         marginTop = value;
         return this;
     }
@@ -124,7 +126,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setMarginBot(int value) {
+    public IMKLayout setMarginBot(int value) {
         marginBot = value;
         return this;
     }
@@ -135,7 +137,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setMarginLeft(int value) {
+    public IMKLayout setMarginLeft(int value) {
         marginLeft = value;
         return this;
     }
@@ -146,7 +148,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setMarginRight(int value) {
+    public IMKLayout setMarginRight(int value) {
         marginRight = value;
         return this;
     }
@@ -157,7 +159,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setPaddingTop(int value) {
+    public IMKLayout setPaddingTop(int value) {
         paddingTop = value;
         return this;
     }
@@ -168,7 +170,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setPaddingBot(int value) {
+    public IMKLayout setPaddingBot(int value) {
         paddingBot = value;
         return this;
     }
@@ -179,7 +181,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setPaddingLeft(int value) {
+    public IMKLayout setPaddingLeft(int value) {
         paddingLeft = value;
         return this;
     }
@@ -190,7 +192,7 @@ public abstract class MKLayoutBase<T extends MKLayoutBase<T>> extends MKWidgetBa
     }
 
     @Override
-    public IMKLayout<T> setPaddingRight(int value) {
+    public IMKLayout setPaddingRight(int value) {
         paddingRight = value;
         return this;
     }

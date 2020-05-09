@@ -3,7 +3,7 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import net.minecraft.client.Minecraft;
 
-public class MKModal extends MKWidgetBase<MKModal> implements IMKModal<MKModal> {
+public class MKModal extends MKWidgetBase implements IMKModal {
 
     private boolean doBackground;
     private int backgroundColor;
@@ -47,7 +47,7 @@ public class MKModal extends MKWidgetBase<MKModal> implements IMKModal<MKModal> 
     @Override
     public boolean onMousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         if (getScreen() != null && shouldCloseOnClickOutside()) {
-            IMKScreen<?> screen = getScreen();
+            IMKScreen screen = getScreen();
             screen.closeModal(this);
             return true;
         }

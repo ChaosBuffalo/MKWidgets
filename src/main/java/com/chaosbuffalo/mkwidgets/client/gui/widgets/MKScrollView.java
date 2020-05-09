@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class MKScrollView extends MKWidgetBase<MKScrollView> {
+public class MKScrollView extends MKWidgetBase {
 
     private double offsetX;
     private double offsetY;
@@ -49,7 +49,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
 
     @Override
-    public IMKWidget<MKScrollView> setScreen(IMKScreen<?> screen) {
+    public IMKWidget setScreen(IMKScreen screen) {
         super.setScreen(screen);
         if (screen != null) {
             screenWidth = screen.getWidth();
@@ -72,7 +72,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
     public boolean onMouseScrollWheel(Minecraft minecraft, double mouseX, double mouseY, double amount) {
         double dY = amount;
         if (isScrollLockOn()) {
-            IMKWidget<?> child = getChild();
+            IMKWidget child = getChild();
             if (child != null) {
                 dY = lockScrollY(child, dY);
             }
@@ -162,14 +162,14 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
     public void centerContentX() {
         if (getChildren().size() > 0) {
-            IMKWidget<?> child = this.getChildren().getFirst();
+            IMKWidget child = this.getChildren().getFirst();
             setOffsetX(getWidth() / 2.0 - child.getWidth() / 2.0 + getX());
         }
     }
 
     public void centerContentY() {
         if (getChildren().size() > 0) {
-            IMKWidget<?> child = this.getChildren().getFirst();
+            IMKWidget child = this.getChildren().getFirst();
             setOffsetX(getHeight() / 2.0 - child.getHeight() / 2.0 + getY());
         }
     }
@@ -196,7 +196,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
     }
 
     public boolean isContentWider() {
-        IMKWidget<?> child = getChild();
+        IMKWidget child = getChild();
         if (child == null) {
             return false;
         }
@@ -204,7 +204,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
     }
 
     public boolean isContentTaller() {
-        IMKWidget<?> child = getChild();
+        IMKWidget child = getChild();
         if (child == null) {
             return false;
         }
@@ -218,7 +218,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
         }
         GL11.glPopMatrix();
         if (shouldDrawScrollbars()) {
-            IMKWidget<?> child = getChild();
+            IMKWidget child = getChild();
             if (child == null) {
                 return;
             }
@@ -261,7 +261,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
         }
         preDraw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
         draw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
-        for (IMKWidget<?> child : getChildren()) {
+        for (IMKWidget child : getChildren()) {
             if (child.isVisible()) {
                 child.drawWidget(mc, mouseX - getIntOffsetX(), mouseY - getIntOffsetY(), partialTicks);
             }
@@ -270,13 +270,13 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
     }
 
     @Override
-    public IMKWidget<?> mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
+    public IMKWidget mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return null;
         }
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (child.mousePressed(minecraft, mouseX - offsetX, mouseY - offsetY, mouseButton) != null) {
                 return child;
             }
@@ -289,9 +289,9 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
     @Override
     public boolean mouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton, double dX, double dY) {
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (child.mouseDragged(minecraft, mouseX - offsetX, mouseY - offsetY, mouseButton, dX, dY)) {
                 return true;
             }
@@ -304,9 +304,9 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (child.mouseReleased(mouseX - offsetX, mouseY - offsetX, mouseButton)) {
                 return true;
             }
@@ -319,7 +319,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
 
     @Nullable
-    public IMKWidget<?> getChild() {
+    public IMKWidget getChild() {
         if (getChildren().size() > 0) {
             return this.getChildren().getFirst();
         } else {
@@ -330,7 +330,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
     @Override
     public boolean onMouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton, double dX, double dY) {
         if (isDragging) {
-            IMKWidget<?> child = getChild();
+            IMKWidget child = getChild();
             if (isScrollLockOn() && child != null) {
                 dX = lockScrollX(child, dX);
                 dY = lockScrollY(child, dY);
@@ -348,7 +348,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
 
 
-    public double lockScrollX(IMKWidget<?> child, double dX) {
+    public double lockScrollX(IMKWidget child, double dX) {
         int scrollX = getX();
         int childWidth = child.getWidth();
         int scrollWidth = getWidth();
@@ -369,7 +369,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
         return dX;
     }
 
-    public double lockScrollY(IMKWidget<?> child, double dY) {
+    public double lockScrollY(IMKWidget child, double dY) {
         int scrollY = getY();
         int childHeight = child.getHeight();
         int scrollHeight = getHeight();
@@ -402,7 +402,7 @@ public class MKScrollView extends MKWidgetBase<MKScrollView> {
 
 
     @Override
-    public boolean addWidget(IMKWidget<?> widget) {
+    public boolean addWidget(IMKWidget widget) {
         if (getChildren().size() > 0) {
             return false;
         }

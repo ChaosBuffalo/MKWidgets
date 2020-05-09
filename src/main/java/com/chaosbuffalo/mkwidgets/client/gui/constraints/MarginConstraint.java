@@ -1,6 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.constraints;
 
-import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKLayout;
+import com.chaosbuffalo.mkwidgets.client.gui.layouts.IMKLayout;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
 public class MarginConstraint extends BaseConstraint{
@@ -19,7 +19,7 @@ public class MarginConstraint extends BaseConstraint{
     }
 
     @Override
-    public void applyConstraint(IMKLayout<?> layout, IMKWidget<?> widget, int widgetIndex) {
+    public void applyConstraint(IMKLayout layout, IMKWidget widget, int widgetIndex) {
         switch (type){
             case TOP:
                 widget.setY(layout.getY() + layout.getMarginTop());

@@ -6,13 +6,11 @@ import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.HoveringTextInstruction;
 import net.minecraft.client.gui.screen.Screen;
 
-public interface IMKScreen<T extends Screen> {
+public interface IMKScreen {
 
-    T getMinecraftScreen();
+    void addModal(IMKModal modal);
 
-    void addModal(IMKModal<?> modal);
-
-    void closeModal(IMKModal<?> modal);
+    void closeModal(IMKModal modal);
 
     void addHoveringText(HoveringTextInstruction instruction);
 
@@ -28,17 +26,17 @@ public interface IMKScreen<T extends Screen> {
 
     void removeState(String name);
 
-    void addState(String name, IMKWidget<?> root);
+    void addState(String name, IMKWidget root);
 
     void setState(String newState);
 
     String getState();
 
-    void addWidget(IMKWidget<?> widget);
+    void addWidget(IMKWidget widget);
 
-    void removeWidget(IMKWidget<?> widget);
+    void removeWidget(IMKWidget widget);
 
-    boolean containsWidget(IMKWidget<?> widget);
+    boolean containsWidget(IMKWidget widget);
 
     void clear();
 

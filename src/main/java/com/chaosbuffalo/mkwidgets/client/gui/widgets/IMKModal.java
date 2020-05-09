@@ -1,12 +1,12 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
-public interface IMKModal<T extends IMKModal<T>> extends IMKWidget<T> {
+public interface IMKModal extends IMKWidget {
 
-    IMKModal<T> setCloseOnClickOutside(boolean value);
+    IMKModal setCloseOnClickOutside(boolean value);
 
     boolean shouldCloseOnClickOutside();
 
-    IMKModal<T> setOnCloseCallback(Runnable callback);
+    IMKModal setOnCloseCallback(Runnable callback);
 
     Runnable getOnCloseCallback();
 

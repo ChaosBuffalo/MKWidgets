@@ -1,8 +1,9 @@
-package com.chaosbuffalo.mkwidgets.client.gui.widgets;
+package com.chaosbuffalo.mkwidgets.client.gui.layouts;
 
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.IConstraint;
+import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
-public abstract class MKConstraintLayout extends MKLayoutBase<MKConstraintLayout> {
+public abstract class MKConstraintLayout extends MKLayoutBase {
 
 
     public MKConstraintLayout(int x, int y, int width, int height) {
@@ -10,12 +11,12 @@ public abstract class MKConstraintLayout extends MKLayoutBase<MKConstraintLayout
     }
 
     @Override
-    public void doLayout(IMKWidget<?> widget, int index) {
+    public void doLayout(IMKWidget widget, int index) {
         applyConstraints(widget, index);
         postConstraintHandler(widget, index);
     }
 
-    public void postConstraintHandler(IMKWidget<?> widget, int index){
+    public void postConstraintHandler(IMKWidget widget, int index){
 
     }
 
@@ -28,116 +29,116 @@ public abstract class MKConstraintLayout extends MKLayoutBase<MKConstraintLayout
     }
 
     @Override
-    public IMKWidget<MKConstraintLayout> setWidth(int newWidth) {
+    public IMKWidget setWidth(int newWidth) {
         super.setWidth(newWidth);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKWidget<MKConstraintLayout> setHeight(int newHeight) {
+    public IMKWidget setHeight(int newHeight) {
         super.setHeight(newHeight);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKWidget<MKConstraintLayout> setX(int newX) {
+    public IMKWidget setX(int newX) {
         super.setX(newX);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKWidget<MKConstraintLayout> setY(int newY) {
+    public IMKWidget setY(int newY) {
         super.setY(newY);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setPaddingTop(int value) {
+    public IMKLayout setPaddingTop(int value) {
         super.setPaddingTop(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setPaddingBot(int value) {
+    public IMKLayout setPaddingBot(int value) {
         super.setPaddingBot(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setPaddingRight(int value) {
+    public IMKLayout setPaddingRight(int value) {
         super.setPaddingRight(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public boolean addWidget(IMKWidget<?> widget) {
+    public boolean addWidget(IMKWidget widget) {
         super.addWidget(widget);
         flagNeedsRecompute();
         return true;
     }
 
     @Override
-    public void removeWidget(IMKWidget<?> widget) {
+    public void removeWidget(IMKWidget widget) {
         super.removeWidget(widget);
         flagNeedsRecompute();
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setPaddingLeft(int value) {
+    public IMKLayout setPaddingLeft(int value) {
         super.setPaddingLeft(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setMarginRight(int value) {
+    public IMKLayout setMarginRight(int value) {
         super.setMarginRight(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setMarginLeft(int value) {
+    public IMKLayout setMarginLeft(int value) {
         super.setMarginLeft(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setMarginBot(int value) {
+    public IMKLayout setMarginBot(int value) {
         super.setMarginBot(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public IMKLayout<MKConstraintLayout> setMarginTop(int value) {
+    public IMKLayout setMarginTop(int value) {
         super.setMarginTop(value);
         flagNeedsRecompute();
         return this;
     }
 
     @Override
-    public void addConstraintToWidget(IConstraint constraint, IMKWidget<?> widget) {
+    public void addConstraintToWidget(IConstraint constraint, IMKWidget widget) {
         super.addConstraintToWidget(constraint, widget);
         flagNeedsRecompute();
     }
 
     @Override
-    public void removeConstraintFromWidget(IConstraint constraint, IMKWidget<?> widget) {
+    public void removeConstraintFromWidget(IConstraint constraint, IMKWidget widget) {
         super.removeConstraintFromWidget(constraint, widget);
         flagNeedsRecompute();
     }
 
     @Override
-    public void clearWidgetConstraints(IMKWidget<?> widget) {
+    public void clearWidgetConstraints(IMKWidget widget) {
         super.clearWidgetConstraints(widget);
         flagNeedsRecompute();
     }

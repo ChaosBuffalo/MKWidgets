@@ -1,7 +1,8 @@
-package com.chaosbuffalo.mkwidgets.client.gui.widgets;
+package com.chaosbuffalo.mkwidgets.client.gui.layouts;
 
 
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.*;
+import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
 public class MKStackLayoutHorizontal extends MKConstraintLayout {
     private int currentWidth;
@@ -29,7 +30,7 @@ public class MKStackLayoutHorizontal extends MKConstraintLayout {
     }
 
     @Override
-    public void postConstraintHandler(IMKWidget<?> widget, int index) {
+    public void postConstraintHandler(IMKWidget widget, int index) {
         super.postConstraintHandler(widget, index);
         if (index > 0){
             currentWidth += getPaddingLeft() + getPaddingRight();
@@ -43,7 +44,7 @@ public class MKStackLayoutHorizontal extends MKConstraintLayout {
     }
 
     @Override
-    public boolean addWidget(IMKWidget<?> widget) {
+    public boolean addWidget(IMKWidget widget) {
         super.addWidget(widget);
         addConstraintToWidget(new MarginConstraint(MarginConstraint.MarginType.TOP), widget);
         addConstraintToWidget(new HorizontalStackConstraint(), widget);

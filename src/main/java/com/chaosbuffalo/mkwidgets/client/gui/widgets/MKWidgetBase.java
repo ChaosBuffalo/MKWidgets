@@ -6,15 +6,14 @@ import net.minecraft.client.Minecraft;
 
 
 import javax.annotation.Nullable;
-import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.UUID;
 
-public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstractGui implements IMKWidget<T> {
+public abstract class MKWidgetBase extends MKAbstractGui implements IMKWidget {
     private UUID id;
-    private final LinkedList<IMKWidget<?>> children;
-    private IMKWidget<?> parent;
-    private IMKScreen<?> screen;
+    private final LinkedList<IMKWidget> children;
+    private IMKWidget parent;
+    private IMKScreen screen;
     private int width;
     private int height;
     private int x;
@@ -51,36 +50,36 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
     }
 
     @Override
-    public LinkedList<IMKWidget<?>> getChildren() {
+    public LinkedList<IMKWidget> getChildren() {
         return children;
     }
 
     @Override
-    public IMKWidget<T> setParent(IMKWidget<?> parent) {
+    public IMKWidget setParent(IMKWidget parent) {
         this.parent = parent;
         return this;
     }
 
     @Override
-    public IMKWidget<T> setScreen(IMKScreen<?> screen) {
+    public IMKWidget setScreen(IMKScreen screen) {
         this.screen = screen;
         return this;
     }
 
     @Nullable
     @Override
-    public IMKWidget<?> getParent() {
+    public IMKWidget getParent() {
         return parent;
     }
 
     @Nullable
     @Override
-    public IMKScreen<?> getScreen() {
+    public IMKScreen getScreen() {
         return screen;
     }
 
     @Override
-    public IMKWidget<T> setHeight(int newHeight) {
+    public IMKWidget setHeight(int newHeight) {
         this.height = newHeight;
         return this;
     }
@@ -103,19 +102,19 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
 
 
     @Override
-    public IMKWidget<T> setWidth(int newWidth) {
+    public IMKWidget setWidth(int newWidth) {
         this.width = newWidth;
         return this;
     }
 
     @Override
-    public IMKWidget<T> setX(int newX) {
+    public IMKWidget setX(int newX) {
         this.x = newX;
         return this;
     }
 
     @Override
-    public IMKWidget<T> setY(int newY) {
+    public IMKWidget setY(int newY) {
         this.y = newY;
         return this;
     }
@@ -146,7 +145,7 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
     }
 
     @Override
-    public IMKWidget<T> setLongHoverTicks(int ticks) {
+    public IMKWidget setLongHoverTicks(int ticks) {
         this.longHoverTicks = ticks;
         return this;
     }
@@ -157,7 +156,7 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
     }
 
     @Override
-    public IMKWidget<T> setSkipBoundsCheck(boolean skipBoundsCheck) {
+    public IMKWidget setSkipBoundsCheck(boolean skipBoundsCheck) {
         this.skipBoundsCheck = skipBoundsCheck;
         return this;
     }
@@ -168,7 +167,7 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
     }
 
     @Override
-    public IMKWidget<T> setHovered(boolean value) {
+    public IMKWidget setHovered(boolean value) {
         this.hovered = value;
         return this;
     }
@@ -179,7 +178,7 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
     }
 
     @Override
-    public IMKWidget<T> setVisible(boolean value) {
+    public IMKWidget setVisible(boolean value) {
         this.visible = value;
         return this;
     }
@@ -190,7 +189,7 @@ public abstract class MKWidgetBase<T extends MKWidgetBase<T>> extends MKAbstract
     }
 
     @Override
-    public IMKWidget<T> setEnabled(boolean value) {
+    public IMKWidget setEnabled(boolean value) {
         this.enabled = value;
         return this;
     }

@@ -14,17 +14,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class MKScreen extends Screen implements IMKScreen<MKScreen> {
-    public ArrayDeque<IMKWidget<?>> children;
+public class MKScreen extends Screen implements IMKScreen {
+    public ArrayDeque<IMKWidget> children;
     public static String NO_STATE = "NO_STATE";
-    private HashMap<Integer, IMKWidget<?>> selectedWidgets;
+    private HashMap<Integer, IMKWidget> selectedWidgets;
     public boolean firstRender;
     private String currentState;
-    public HashMap<String, IMKWidget<?>> states;
+    public HashMap<String, IMKWidget> states;
     private ArrayList<Runnable> postSetupCallbacks;
     private ArrayList<Runnable> preDrawRunnables;
     private ArrayList<HoveringTextInstruction> hoveringText;
-    private ArrayDeque<IMKModal<?>> modals;
+    private ArrayDeque<IMKModal> modals;
 
     public MKScreen(ITextComponent title) {
         super(title);
@@ -52,9 +52,9 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        Iterator<IMKModal<?>> modalIt = modals.descendingIterator();
+        Iterator<IMKModal> modalIt = modals.descendingIterator();
         while (modalIt.hasNext()) {
-            IMKModal<?> child = modalIt.next();
+            IMKModal child = modalIt.next();
             if (!child.isVisible()) {
                 continue;
             }
@@ -62,9 +62,9 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
                 return true;
             }
         }
-        Iterator<IMKWidget<?>> it = children.descendingIterator();
+        Iterator<IMKWidget> it = children.descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (!child.isVisible()) {
                 continue;
             }
@@ -82,7 +82,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     }
 
     @Override
-    public void addModal(IMKModal<?> modal) {
+    public void addModal(IMKModal modal) {
         modal.inheritScreen(this);
         modal.setWidth(width);
         modal.setHeight(height);
@@ -90,7 +90,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     }
 
     @Override
-    public void closeModal(IMKModal<?> modal) {
+    public void closeModal(IMKModal modal) {
         if (this.modals.removeIf((x) -> x.getId().equals(modal.getId()))) {
             if (modal.getOnCloseCallback() != null) {
                 modal.getOnCloseCallback().run();
@@ -102,7 +102,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     @Override
     public void resize(Minecraft minecraft, int width, int height) {
         super.resize(minecraft, width, height);
-        for (IMKModal<?> modal : modals){
+        for (IMKModal modal : modals){
             closeModal(modal);
         }
         flagNeedSetup();
@@ -135,7 +135,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     }
 
     @Override
-    public void addState(String name, IMKWidget<?> root) {
+    public void addState(String name, IMKWidget root) {
         this.states.put(name, root);
     }
 
@@ -188,13 +188,13 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     }
 
     @Override
-    public void addWidget(IMKWidget<?> widget) {
+    public void addWidget(IMKWidget widget) {
         widget.inheritScreen(this);
         this.children.add(widget);
     }
 
     @Override
-    public void removeWidget(IMKWidget<?> widget) {
+    public void removeWidget(IMKWidget widget) {
         if (containsWidget(widget)) {
             if (children.removeIf((x) -> x.getId().equals(widget.getId()))) {
                 widget.inheritScreen(null);
@@ -203,8 +203,8 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     }
 
     @Override
-    public boolean containsWidget(IMKWidget<?> widget) {
-        for (IMKWidget<?> child : children) {
+    public boolean containsWidget(IMKWidget widget) {
+        for (IMKWidget child : children) {
             if (widget.getId().equals(child.getId())) {
                 return true;
             }
@@ -221,12 +221,12 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
         for (Runnable runnable : preDrawRunnables) {
             runnable.run();
         }
-        for (IMKWidget<?> child : children) {
+        for (IMKWidget child : children) {
             if (child.isVisible()) {
                 child.drawWidget(this.minecraft, mouseX, mouseY, partialTicks);
             }
         }
-        for (IMKModal<?> modal : modals) {
+        for (IMKModal modal : modals) {
             if (modal.isVisible()) {
                 modal.drawWidget(this.minecraft, mouseX, mouseY, partialTicks);
             }
@@ -250,25 +250,25 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        Iterator<IMKModal<?>> modalIt = modals.descendingIterator();
+        Iterator<IMKModal> modalIt = modals.descendingIterator();
         while (modalIt.hasNext()) {
-            IMKModal<?> child = modalIt.next();
+            IMKModal child = modalIt.next();
             if (!child.isVisible()) {
                 continue;
             }
-            IMKWidget<?> clickHandler = child.mousePressed(this.minecraft, mouseX, mouseY, mouseButton);
+            IMKWidget clickHandler = child.mousePressed(this.minecraft, mouseX, mouseY, mouseButton);
             if (clickHandler != null) {
                 selectedWidgets.put(mouseButton, clickHandler);
                 return true;
             }
         }
-        Iterator<IMKWidget<?>> it = children.descendingIterator();
+        Iterator<IMKWidget> it = children.descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (!child.isVisible()) {
                 continue;
             }
-            IMKWidget<?> clickHandler = child.mousePressed(this.minecraft, mouseX, mouseY, mouseButton);
+            IMKWidget clickHandler = child.mousePressed(this.minecraft, mouseX, mouseY, mouseButton);
             if (clickHandler != null) {
                 selectedWidgets.put(mouseButton, clickHandler);
                 return true;
@@ -279,7 +279,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
 
     @Override
     public void clearWidgets() {
-        for (IMKWidget<?> widget : children) {
+        for (IMKWidget widget : children) {
             widget.inheritScreen(null);
         }
         children.clear();
@@ -287,7 +287,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
 
     @Override
     public void clearModals() {
-        for (IMKModal<?> modal : modals) {
+        for (IMKModal modal : modals) {
             modal.inheritScreen(null);
         }
         modals.clear();
@@ -304,7 +304,7 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
         if (selectedWidgets.get(mouseButton) != null) {
-            IMKWidget<?> selected = selectedWidgets.get(mouseButton);
+            IMKWidget selected = selectedWidgets.get(mouseButton);
             selectedWidgets.remove(mouseButton);
             if (selected.mouseReleased(mouseX, mouseY, mouseButton)) {
                 return true;
@@ -312,11 +312,4 @@ public class MKScreen extends Screen implements IMKScreen<MKScreen> {
         }
         return super.mouseReleased(mouseX, mouseY, mouseButton);
     }
-
-
-    @Override
-    public MKScreen getMinecraftScreen() {
-        return this;
-    }
-
 }

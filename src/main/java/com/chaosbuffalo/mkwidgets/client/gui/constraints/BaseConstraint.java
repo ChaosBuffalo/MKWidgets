@@ -1,6 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.constraints;
 
-import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKLayout;
+import com.chaosbuffalo.mkwidgets.client.gui.layouts.IMKLayout;
 
 import java.util.UUID;
 
@@ -11,11 +11,11 @@ public abstract class BaseConstraint implements IConstraint {
         constraintId = UUID.randomUUID();
     }
 
-    public int getAvailableWidth(IMKLayout<?> layout){
+    public int getAvailableWidth(IMKLayout layout){
         return layout.getWidth() - layout.getMarginRight() - layout.getMarginLeft();
     }
 
-    public int getAvailableHeight(IMKLayout<?> layout){
+    public int getAvailableHeight(IMKLayout layout){
         return layout.getHeight() - layout.getMarginTop() - layout.getMarginBot();
     }
 

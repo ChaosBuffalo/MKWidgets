@@ -5,28 +5,27 @@ import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import net.minecraft.client.Minecraft;
 
 import javax.annotation.Nullable;
-import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 
-public interface IMKWidget<T extends IMKWidget<T>> {
+public interface IMKWidget {
 
-    default boolean addWidget(IMKWidget<?> widget) {
+    default boolean addWidget(IMKWidget widget) {
         widget.setParent(this);
         widget.inheritScreen(getScreen());
         getChildren().add(widget);
         return true;
     }
 
-    default void inheritScreen(IMKScreen<?> screen){
+    default void inheritScreen(IMKScreen screen){
         setScreen(screen);
-        for (IMKWidget<?> widget : getChildren()){
+        for (IMKWidget widget : getChildren()){
             widget.inheritScreen(screen);
         }
     }
 
-    default void removeWidget(IMKWidget<?> widget) {
+    default void removeWidget(IMKWidget widget) {
         if (widget.getParent() != null && widget.getParent().getId().equals(this.getId())) {
             getChildren().removeIf((x) -> x.getId().equals(widget.getId()));
             widget.setParent(null);
@@ -36,25 +35,25 @@ public interface IMKWidget<T extends IMKWidget<T>> {
 
     UUID getId();
 
-    LinkedList<IMKWidget<?>> getChildren();
+    LinkedList<IMKWidget> getChildren();
 
-    IMKWidget<T> setParent(IMKWidget<?> parent);
+    IMKWidget setParent(IMKWidget parent);
 
-    IMKWidget<T> setScreen(IMKScreen<?> screen);
-
-    @Nullable
-    IMKWidget<?> getParent();
+    IMKWidget setScreen(IMKScreen screen);
 
     @Nullable
-    IMKScreen<?> getScreen();
+    IMKWidget getParent();
 
-    IMKWidget<T> setHeight(int newHeight);
+    @Nullable
+    IMKScreen getScreen();
 
-    IMKWidget<T> setWidth(int newWidth);
+    IMKWidget setHeight(int newHeight);
 
-    IMKWidget<T> setX(int newX);
+    IMKWidget setWidth(int newWidth);
 
-    IMKWidget<T> setY(int newY);
+    IMKWidget setX(int newX);
+
+    IMKWidget setY(int newY);
 
     int getWidth();
 
@@ -90,23 +89,23 @@ public interface IMKWidget<T extends IMKWidget<T>> {
 
     int getLongHoverTicks();
 
-    IMKWidget<T> setLongHoverTicks(int ticks);
+    IMKWidget setLongHoverTicks(int ticks);
 
     boolean skipBoundsCheck();
 
-    IMKWidget<T> setSkipBoundsCheck(boolean value);
+    IMKWidget setSkipBoundsCheck(boolean value);
 
     boolean isHovered();
 
-    IMKWidget<T> setHovered(boolean value);
+    IMKWidget setHovered(boolean value);
 
     boolean isVisible();
 
-    IMKWidget<T> setVisible(boolean value);
+    IMKWidget setVisible(boolean value);
 
     boolean isEnabled();
 
-    IMKWidget<T> setEnabled(boolean value);
+    IMKWidget setEnabled(boolean value);
 
     default boolean isInBounds(double x, double y) {
         if (skipBoundsCheck()) {
@@ -184,7 +183,7 @@ public interface IMKWidget<T extends IMKWidget<T>> {
         }
         preDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         draw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
-        for (IMKWidget<?> child : getChildren()) {
+        for (IMKWidget child : getChildren()) {
             if (child.isVisible()) {
                 child.drawWidget(mc, mouseX, mouseY, partialTicks);
             }
@@ -194,14 +193,14 @@ public interface IMKWidget<T extends IMKWidget<T>> {
     }
 
     default void clearWidgets() {
-        for (IMKWidget<?> widget : getChildren()) {
+        for (IMKWidget widget : getChildren()) {
             widget.setParent(null);
         }
         getChildren().clear();
     }
 
     @Nullable
-    default IMKWidget<?> getChild(int index){
+    default IMKWidget getChild(int index){
         return getChildren().get(index);
     }
 
@@ -213,9 +212,9 @@ public interface IMKWidget<T extends IMKWidget<T>> {
         if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return false;
         }
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (child.mouseScrollWheel(minecraft, mouseX, mouseY, distance)) {
                 return true;
             }
@@ -225,9 +224,9 @@ public interface IMKWidget<T extends IMKWidget<T>> {
 
     default boolean mouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton,
                                  double dX, double dY) {
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (child.mouseDragged(minecraft, mouseX, mouseY, mouseButton, dX, dY)) {
                 return true;
             }
@@ -241,9 +240,9 @@ public interface IMKWidget<T extends IMKWidget<T>> {
     }
 
     default boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
+            IMKWidget child = it.next();
             if (child.mouseReleased(mouseX, mouseY, mouseButton)) {
                 return true;
             }
@@ -255,14 +254,14 @@ public interface IMKWidget<T extends IMKWidget<T>> {
         return false;
     }
 
-    default IMKWidget<?> mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
+    default IMKWidget mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return null;
         }
-        Iterator<IMKWidget<?>> it = getChildren().descendingIterator();
+        Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
-            IMKWidget<?> child = it.next();
-            IMKWidget<?> result = child.mousePressed(minecraft, mouseX, mouseY, mouseButton);
+            IMKWidget child = it.next();
+            IMKWidget result = child.mousePressed(minecraft, mouseX, mouseY, mouseButton);
             if (result != null) {
                 return result;
             }
