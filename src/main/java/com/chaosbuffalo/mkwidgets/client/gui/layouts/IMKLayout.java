@@ -14,7 +14,7 @@ public interface IMKLayout extends IMKWidget {
         return setMarginLeft(left).setMarginRight(right).setMarginTop(top).setMarginBot(bottom);
     }
 
-    default void doLayout(IMKWidget widget, int index) {
+    default void layoutWidget(IMKWidget widget, int index) {
     }
 
     void addConstraintToWidget(IConstraint constraint, IMKWidget widget);
@@ -23,7 +23,7 @@ public interface IMKLayout extends IMKWidget {
 
     void removeConstraintFromWidget(IConstraint constraint, IMKWidget widget);
 
-    default void setupLayoutStartState() {
+    default void preLayout() {
     }
 
     default void postLayout() {

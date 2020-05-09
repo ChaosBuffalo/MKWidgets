@@ -24,14 +24,14 @@ public class MKStackLayoutHorizontal extends MKConstraintLayout {
     }
 
     @Override
-    public void setupLayoutStartState() {
+    public void preLayout() {
         currentWidth = 0;
         currentWidth += getMarginLeft() + getMarginRight();
     }
 
     @Override
-    public void postConstraintHandler(IMKWidget widget, int index) {
-        super.postConstraintHandler(widget, index);
+    public void postLayoutWidget(IMKWidget widget, int index) {
+        super.postLayoutWidget(widget, index);
         if (index > 0){
             currentWidth += getPaddingLeft() + getPaddingRight();
         }

@@ -27,14 +27,14 @@ public class MKStackLayoutVertical extends MKConstraintLayout {
     }
 
     @Override
-    public void setupLayoutStartState() {
+    public void preLayout() {
         currentHeight = 0;
         currentHeight += getMarginBot() + getMarginTop();
     }
 
     @Override
-    public void postConstraintHandler(IMKWidget widget, int index) {
-        super.postConstraintHandler(widget, index);
+    public void postLayoutWidget(IMKWidget widget, int index) {
+        super.postLayoutWidget(widget, index);
         if (index > 0){
             currentHeight += getPaddingBot() + getPaddingTop();
         }

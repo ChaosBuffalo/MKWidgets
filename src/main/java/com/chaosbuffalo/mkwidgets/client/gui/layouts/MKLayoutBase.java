@@ -32,10 +32,10 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     }
 
     public void recomputeChildren() {
-        setupLayoutStartState();
+        preLayout();
         int i = 0;
         for (IMKWidget child : getChildren()) {
-            doLayout(child, i);
+            layoutWidget(child, i);
             i++;
         }
         postLayout();

@@ -11,12 +11,12 @@ public abstract class MKConstraintLayout extends MKLayoutBase {
     }
 
     @Override
-    public void doLayout(IMKWidget widget, int index) {
+    public void layoutWidget(IMKWidget widget, int index) {
         applyConstraints(widget, index);
-        postConstraintHandler(widget, index);
+        postLayoutWidget(widget, index);
     }
 
-    public void postConstraintHandler(IMKWidget widget, int index){
+    public void postLayoutWidget(IMKWidget widget, int index){
 
     }
 
