@@ -1,0 +1,62 @@
+package com.chaosbuffalo.mkwidgets;
+
+import com.chaosbuffalo.mkwidgets.client.gui.screens.TestScreen;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.stream.Collectors;
+
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod("mkwidgets")
+@Mod.EventBusSubscriber
+public class MKWidgets
+{
+    // Directly reference a log4j logger.
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    public static final String MODID = "mkwidgets";
+    public static final KeyBinding openTestUi = new KeyBinding("key.mkwidgets.test.desc", 92,
+            "key.mkwidgets.category");
+
+    public MKWidgets() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private void clientSetup(final FMLClientSetupEvent event){
+        ClientRegistry.registerKeyBinding(openTestUi);
+    }
+
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onEvent(InputEvent.KeyInputEvent event){
+        LOGGER.info("In key press {}", event);
+        if (openTestUi.isPressed()){
+            LOGGER.info("Opening test ui");
+            Minecraft.getInstance().displayGuiScreen(new TestScreen(
+                    new StringTextComponent("MK Widgets Test")));
+        }
+    }
+}
