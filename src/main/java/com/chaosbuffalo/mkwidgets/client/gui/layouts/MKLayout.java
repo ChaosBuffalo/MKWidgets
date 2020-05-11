@@ -43,10 +43,8 @@ public class MKLayout extends MKWidget implements IMKLayout {
 
     @Override
     public void addConstraintToWidget(IConstraint constraint, IMKWidget widget) {
-        if (!constraints.containsKey(widget.getId())){
-            constraints.put(widget.getId(), new ArrayList<>());
-        }
-        ArrayList<IConstraint> widgetConstraints = constraints.get(widget.getId());
+        ArrayList<IConstraint> widgetConstraints =  constraints.computeIfAbsent(widget.getId(),
+                (id) -> new ArrayList<>());
         widgetConstraints.add(constraint);
         flagNeedsRecompute();
     }
