@@ -3,41 +3,36 @@ package com.chaosbuffalo.mkwidgets.client.gui.screens;
 import com.chaosbuffalo.mkwidgets.MKWidgets;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import com.chaosbuffalo.mkwidgets.client.gui.widgets.HoveringTextInstruction;
+import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.common.MinecraftForge;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 public class MKScreen extends Screen implements IMKScreen {
-    public ArrayDeque<IMKWidget> children;
+    public final ArrayDeque<IMKWidget> children;
     public static String NO_STATE = "NO_STATE";
-    private HashMap<Integer, IMKWidget> selectedWidgets;
+    private final HashMap<Integer, IMKWidget> selectedWidgets;
     public boolean firstRender;
-    private String currentState;
+    private final Stack<String> stateStack;
     public HashMap<String, IMKWidget> states;
-    private ArrayList<Runnable> postSetupCallbacks;
-    private ArrayList<Runnable> preDrawRunnables;
-    private ArrayList<HoveringTextInstruction> hoveringText;
-    private ArrayDeque<IMKModal> modals;
+    private final ArrayList<Runnable> postSetupCallbacks;
+    private final ArrayList<Runnable> preDrawRunnables;
+    private final ArrayList<HoveringTextInstruction> hoveringText;
+    private final ArrayDeque<IMKModal> modals;
 
     public MKScreen(ITextComponent title) {
         super(title);
         firstRender = true;
         children = new ArrayDeque<>();
         states = new HashMap<>();
+        stateStack = new Stack<>();
         postSetupCallbacks = new ArrayList<>();
         selectedWidgets = new HashMap<>();
         preDrawRunnables = new ArrayList<>();
         hoveringText = new ArrayList<>();
         modals = new ArrayDeque<>();
-        currentState = NO_STATE;
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -102,6 +97,7 @@ public class MKScreen extends Screen implements IMKScreen {
     @Override
     public void resize(Minecraft minecraft, int width, int height) {
         super.resize(minecraft, width, height);
+        MKWidgets.LOGGER.info("Resize event called?");
         for (IMKModal modal : modals){
             closeModal(modal);
         }
@@ -125,8 +121,8 @@ public class MKScreen extends Screen implements IMKScreen {
 
     @Override
     public void addRestoreStateCallbacks() {
-        String state = getState();
-        addPostSetupCallback(() -> setState(state));
+        String state = popState();
+        addPostSetupCallback(() -> pushState(state));
     }
 
     @Override
@@ -145,26 +141,44 @@ public class MKScreen extends Screen implements IMKScreen {
     }
 
     @Override
-    public void setState(String newState) {
-        if (newState.equals(currentState)) {
+    public void pushState(String newState) {
+        if (newState.equals(getState())) {
             return;
         }
+        if (handleStateTransition(newState, getState())){
+            stateStack.push(newState);
+        }
+    }
+
+    private boolean handleStateTransition(String newState, String oldState){
         if (newState.equals(NO_STATE) || states.containsKey(newState)) {
+            if (!oldState.equals(NO_STATE)) {
+                this.removeWidget(states.get(oldState));
+            }
             if (!newState.equals(NO_STATE)) {
                 this.addWidget(states.get(newState));
             }
-            if (!currentState.equals(NO_STATE)) {
-                this.removeWidget(states.get(currentState));
-            }
-            this.currentState = newState;
+            return true;
         } else {
             MKWidgets.LOGGER.warn("Tried to set screen state to: {}, but state doesn't exist.", newState);
+            return false;
         }
     }
 
     @Override
+    public String popState() {
+        String oldState = stateStack.pop();
+        String newState = getState();
+        handleStateTransition(newState, oldState);
+        return oldState;
+    }
+
+    @Override
     public String getState() {
-        return currentState;
+        if (stateStack.empty()){
+            return NO_STATE;
+        }
+        return stateStack.peek();
     }
 
     private void runSetup() {
@@ -179,7 +193,6 @@ public class MKScreen extends Screen implements IMKScreen {
         clearWidgets();
         clearPreDrawRunnables();
         this.states.clear();
-        this.currentState = NO_STATE;
     }
 
     public void flagNeedSetup() {

@@ -1,4 +1,4 @@
-package com.chaosbuffalo.mkwidgets.client.gui.widgets;
+package com.chaosbuffalo.mkwidgets.client.gui.instructions;
 
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import net.minecraft.client.gui.FontRenderer;

@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class MKScrollView extends MKWidgetBase {
+public class MKScrollView extends MKWidget {
 
     private double offsetX;
     private double offsetY;
@@ -23,7 +23,6 @@ public class MKScrollView extends MKWidgetBase {
     private boolean doScrollX;
     private boolean doScrollY;
     private boolean drawScrollBars;
-    private int SCROLL_VELOCITY = 10;
     private static final int SCROLL_BAR_WIDTH = 1;
 
     public MKScrollView(int x, int y, int width, int height, double scaleFactor,
@@ -256,8 +255,8 @@ public class MKScrollView extends MKWidgetBase {
 
     @Override
     public void drawWidget(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (doDrawWidgetBbox()){
-            drawWidgetBbox(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
+        if (doDrawDebugBounds()){
+            drawDebugBounds(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
         }
         preDraw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
         draw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);

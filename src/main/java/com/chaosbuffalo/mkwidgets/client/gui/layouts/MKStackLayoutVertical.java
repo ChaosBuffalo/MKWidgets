@@ -6,7 +6,7 @@ import com.chaosbuffalo.mkwidgets.client.gui.constraints.MarginConstraint;
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.VerticalStackConstraint;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
-public class MKStackLayoutVertical extends MKConstraintLayout {
+public class MKStackLayoutVertical extends MKLayout{
 
     private int currentHeight;
     private boolean doSetWidth;
@@ -17,12 +17,12 @@ public class MKStackLayoutVertical extends MKConstraintLayout {
         doSetWidth = false;
     }
 
-    public MKStackLayoutVertical doSetWidth(boolean value) {
+    public MKStackLayoutVertical doSetChildWidth(boolean value) {
         doSetWidth = value;
         return this;
     }
 
-    public boolean shouldSetWidth() {
+    public boolean shouldSetChildWidth() {
         return doSetWidth;
     }
 
@@ -51,7 +51,7 @@ public class MKStackLayoutVertical extends MKConstraintLayout {
         super.addWidget(widget);
         addConstraintToWidget(new MarginConstraint(MarginConstraint.MarginType.LEFT), widget);
         addConstraintToWidget(new VerticalStackConstraint(), widget);
-        if (shouldSetWidth()){
+        if (shouldSetChildWidth()){
             addConstraintToWidget(new LayoutRelativeWidthConstraint(1.0f), widget);
         }
         return true;

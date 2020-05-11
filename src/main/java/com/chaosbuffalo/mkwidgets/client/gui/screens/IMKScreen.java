@@ -3,8 +3,7 @@ package com.chaosbuffalo.mkwidgets.client.gui.screens;
 
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import com.chaosbuffalo.mkwidgets.client.gui.widgets.HoveringTextInstruction;
-import net.minecraft.client.gui.screen.Screen;
+import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
 
 public interface IMKScreen {
 
@@ -28,7 +27,9 @@ public interface IMKScreen {
 
     void addState(String name, IMKWidget root);
 
-    void setState(String newState);
+    void pushState(String newState);
+
+    String popState();
 
     String getState();
 

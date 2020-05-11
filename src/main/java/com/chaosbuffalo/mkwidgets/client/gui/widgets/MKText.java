@@ -2,25 +2,31 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
-public class MKText extends MKWidgetBase {
+public class MKText extends MKWidget {
 
-    public String text;
+    public ITextComponent text;
     private FontRenderer fontRenderer;
     public int color;
     public boolean isMultiline;
     public boolean isCentered;
+
+    public MKText(FontRenderer renderer, ITextComponent text, int width, int height){
+        super(0, 0, width, height);
+        this.color = 0;
+        this.fontRenderer = renderer;
+        this.text = text;
+        this.isMultiline = false;
+    }
 
     public MKText(FontRenderer renderer, String text) {
         this(renderer, text, 200);
     }
 
     public MKText(FontRenderer renderer, String text, int width, int height){
-        super(0, 0, width, height);
-        this.color = 0;
-        this.fontRenderer = renderer;
-        this.text = text;
-        this.isMultiline = false;
+        this(renderer, new StringTextComponent(text), width, height);
     }
 
     public MKText(FontRenderer renderer, String text, int width){
@@ -41,16 +47,21 @@ public class MKText extends MKWidgetBase {
     }
 
     public void draw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        String formattedText = getText().getFormattedText();
         if (isCentered()) {
-            this.drawCenteredString(this.fontRenderer, this.getText(),
+            this.drawCenteredStringNoDropShadow(this.fontRenderer, formattedText,
                     this.getX() + this.getWidth() / 2,
-                    this.getY() + this.getHeight() / 2, color);
+                    this.getY(), color);
         } else if (isMultiline()) {
-            fontRenderer.drawSplitString(this.getText(), this.getX(), this.getY(), this.getWidth(), this.color);
+            fontRenderer.drawSplitString(formattedText, this.getX(), this.getY(), this.getWidth(), this.color);
         } else {
-            fontRenderer.drawString(this.getText(), this.getX(), this.getY(), this.color);
+            fontRenderer.drawString(formattedText, this.getX(), this.getY(), this.color);
         }
 
+    }
+
+    public void drawCenteredStringNoDropShadow(FontRenderer fontRenderer, String string, int x, int y, int color) {
+        fontRenderer.drawString(string, (float)(x - fontRenderer.getStringWidth(string) / 2), (float)y, color);
     }
 
     public MKText setIsCentered(boolean isCentered) {
@@ -63,12 +74,16 @@ public class MKText extends MKWidgetBase {
     }
 
     public MKText setText(String text) {
+        return setText(new StringTextComponent(text));
+    }
+
+    public MKText setText(ITextComponent text){
         this.text = text;
         updateLabel();
         return this;
     }
 
-    public String getText() {
+    public ITextComponent getText() {
         return text;
     }
 
@@ -92,7 +107,7 @@ public class MKText extends MKWidgetBase {
 
     private void updateLabel() {
         if (isMultiline()) {
-            setHeight(fontRenderer.getWordWrappedHeight(getText(), getWidth()));
+            setHeight(fontRenderer.getWordWrappedHeight(getText().getFormattedText(), getWidth()));
         } else {
             setHeight(fontRenderer.FONT_HEIGHT);
         }

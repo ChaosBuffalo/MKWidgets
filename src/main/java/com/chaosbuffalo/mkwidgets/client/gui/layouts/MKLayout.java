@@ -2,14 +2,14 @@ package com.chaosbuffalo.mkwidgets.client.gui.layouts;
 
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.IConstraint;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKWidgetBase;
+import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKWidget;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
+public class MKLayout extends MKWidget implements IMKLayout {
     private int paddingLeft;
     private int paddingRight;
     private int paddingTop;
@@ -21,7 +21,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     private boolean needsRecompute;
     private HashMap<UUID, ArrayList<IConstraint>> constraints;
 
-    public MKLayoutBase(int x, int y, int width, int height){
+    public MKLayout(int x, int y, int width, int height){
         super(x, y, width, height);
         constraints = new HashMap<>();
         needsRecompute = false;
@@ -48,6 +48,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
         }
         ArrayList<IConstraint> widgetConstraints = constraints.get(widget.getId());
         widgetConstraints.add(constraint);
+        flagNeedsRecompute();
     }
 
     @Override
@@ -55,6 +56,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
         if (constraints.containsKey(widget.getId())){
             ArrayList<IConstraint> widgetConstraints = constraints.get(widget.getId());
             widgetConstraints.removeIf((con) -> con.getConstraintID().equals(constraint.getConstraintID()));
+            flagNeedsRecompute();
         }
     }
 
@@ -69,15 +71,61 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     }
 
     @Override
+    public boolean addWidget(IMKWidget widget) {
+        super.addWidget(widget);
+        flagNeedsRecompute();
+        return true;
+    }
+
+
+    @Override
+    public void clearWidgets() {
+        super.clearWidgets();
+        flagNeedsRecompute();
+    }
+
+
+    @Override
+    public IMKWidget setWidth(int newWidth) {
+        super.setWidth(newWidth);
+        flagNeedsRecompute();
+        return this;
+    }
+
+    @Override
+    public IMKWidget setHeight(int newHeight) {
+        super.setHeight(newHeight);
+        flagNeedsRecompute();
+        return this;
+    }
+
+    @Override
+    public IMKWidget setX(int newX) {
+        super.setX(newX);
+        flagNeedsRecompute();
+        return this;
+    }
+
+    @Override
+    public IMKWidget setY(int newY) {
+        super.setY(newY);
+        flagNeedsRecompute();
+        return this;
+    }
+
+
+    @Override
     public void removeWidget(IMKWidget widget) {
         super.removeWidget(widget);
-        constraints.remove(widget.getId());
+        clearWidgetConstraints(widget);
+        flagNeedsRecompute();
     }
 
     @Override
     public void clearWidgetConstraints(IMKWidget widget) {
         if (constraints.containsKey(widget.getId())){
             constraints.remove(widget.getId());
+            flagNeedsRecompute();
         }
     }
 
@@ -97,8 +145,8 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
         int y = getY();
         int width = getWidth();
         int height = getHeight();
-        if (doDrawWidgetBbox()){
-            drawWidgetBbox(mc, x, y, width, height, mouseX, mouseY, partialTicks);
+        if (doDrawDebugBounds()){
+            drawDebugBounds(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         }
         preDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         draw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
@@ -117,6 +165,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setMarginTop(int value) {
         marginTop = value;
+        flagNeedsRecompute();
         return this;
     }
 
@@ -128,7 +177,26 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setMarginBot(int value) {
         marginBot = value;
+        flagNeedsRecompute();
         return this;
+    }
+
+    @Override
+    public void layoutWidget(IMKWidget widget, int index) {
+        applyConstraints(widget, index);
+        postLayoutWidget(widget, index);
+    }
+
+    public void postLayoutWidget(IMKWidget widget, int index){
+
+    }
+
+    protected void skipComputeSetWidth(int newWidth){
+        super.setWidth(newWidth);
+    }
+
+    protected void skipComputeSetHeight(int newHeight){
+        super.setHeight(newHeight);
     }
 
     @Override
@@ -139,6 +207,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setMarginLeft(int value) {
         marginLeft = value;
+        flagNeedsRecompute();
         return this;
     }
 
@@ -150,6 +219,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setMarginRight(int value) {
         marginRight = value;
+        flagNeedsRecompute();
         return this;
     }
 
@@ -161,6 +231,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setPaddingTop(int value) {
         paddingTop = value;
+        flagNeedsRecompute();
         return this;
     }
 
@@ -172,6 +243,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setPaddingBot(int value) {
         paddingBot = value;
+        flagNeedsRecompute();
         return this;
     }
 
@@ -183,6 +255,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setPaddingLeft(int value) {
         paddingLeft = value;
+        flagNeedsRecompute();
         return this;
     }
 
@@ -194,6 +267,7 @@ public abstract class MKLayoutBase extends MKWidgetBase implements IMKLayout {
     @Override
     public IMKLayout setPaddingRight(int value) {
         paddingRight = value;
+        flagNeedsRecompute();
         return this;
     }
 

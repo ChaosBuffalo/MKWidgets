@@ -3,7 +3,7 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import net.minecraft.client.Minecraft;
 
-public class MKModal extends MKWidgetBase implements IMKModal {
+public class MKModal extends MKWidget implements IMKModal {
 
     private boolean doBackground;
     private int backgroundColor;

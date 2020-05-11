@@ -159,14 +159,14 @@ public interface IMKWidget {
         setHovered(hovered);
     }
 
-    default boolean doDrawWidgetBbox(){
-        return true;
-    }
+    boolean doDrawDebugBounds();
 
-    default void drawWidgetBbox(Minecraft mc, int x, int y, int width, int height, int mouseX,
-                                int mouseY, float partialTicks){
+    default void drawDebugBounds(Minecraft mc, int x, int y, int width, int height, int mouseX,
+                                 int mouseY, float partialTicks){
 
     }
+
+    void setDrawDebug(boolean value);
 
     void setDebugColor(int color);
 
@@ -178,8 +178,8 @@ public interface IMKWidget {
         int y = getY();
         int width = getWidth();
         int height = getHeight();
-        if (doDrawWidgetBbox()){
-            drawWidgetBbox(mc, x, y, width, height, mouseX, mouseY, partialTicks);
+        if (doDrawDebugBounds()){
+            drawDebugBounds(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         }
         preDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         draw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
