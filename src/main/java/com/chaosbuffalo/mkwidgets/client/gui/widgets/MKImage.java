@@ -10,14 +10,25 @@ public class MKImage extends MKWidget {
     private int texV;
     private int texWidth;
     private int texHeight;
+    private int sourceWidth;
+    private int sourceHeight;
 
     public MKImage(int x, int y, int width, int height, ResourceLocation imageLoc) {
+        this(x, y, width, height, width, height, 0, 0, width, height, imageLoc);
+    }
+
+    public MKImage(int x, int y, int width, int height, int sourceWidth,
+                   int sourceHeight, int imageU, int imageV,
+                   int imageWidth, int imageHeight,
+                   ResourceLocation imageLoc){
         super(x, y, width, height);
         this.imageLoc = imageLoc;
-        texU = 0;
-        texV = 0;
-        texWidth = width;
-        texHeight = height;
+        texU = imageU;
+        texV = imageV;
+        this.sourceHeight = sourceHeight;
+        this.sourceWidth = sourceWidth;
+        texWidth = imageWidth;
+        texHeight = imageHeight;
     }
 
     public MKImage setTexU(int value) {
@@ -25,9 +36,36 @@ public class MKImage extends MKWidget {
         return this;
     }
 
+    public int getSourceWidth() {
+        return sourceWidth;
+    }
+
+    public int getSourceHeight() {
+        return sourceHeight;
+    }
+
+    public MKImage setSourceHeight(int sourceHeight) {
+        this.sourceHeight = sourceHeight;
+        return this;
+    }
+
+    public MKImage setSourceWidth(int sourceWidth) {
+        this.sourceWidth = sourceWidth;
+        return this;
+    }
+
     public MKImage setTexV(int value) {
         texV = value;
         return this;
+    }
+
+    public MKImage setImageLoc(ResourceLocation imageLoc) {
+        this.imageLoc = imageLoc;
+        return this;
+    }
+
+    public ResourceLocation getImageLoc() {
+        return imageLoc;
     }
 
     public int getTexU() {
@@ -60,9 +98,9 @@ public class MKImage extends MKWidget {
     public void draw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.disableDepthTest();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        mc.getTextureManager().bindTexture(imageLoc);
-        blit(getX(), getY(), (float)getTexU(), (float)getTexV(), getWidth(), getHeight(),
-                getTexWidth(), getTexHeight());
+        mc.getTextureManager().bindTexture(getImageLoc());
+        mkBlitUVSizeDifferent(getX(), getY(), getWidth(), getHeight(),
+                (float)getTexU(), (float)getTexV(), getTexWidth(), getTexHeight(), getSourceWidth(), getSourceHeight());
         RenderSystem.enableDepthTest();
     }
 }

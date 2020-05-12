@@ -22,9 +22,9 @@ public abstract class MKAbstractGui extends AbstractGui {
                                    int z, int uSize, int vSize, float u0, float v0,
                                    int texWidth, int texHeight) {
         mkInnerBlit(x0, x1, y0, y1, z,
-                (u0 + 0.0F) / (float)texWidth,
+                u0 / (float)texWidth,
                 (u0 + (float)uSize) / (float)texWidth,
-                (v0 + 0.0F) / (float)texHeight,
+                v0 / (float)texHeight,
                 (v0 + (float)vSize) / (float)texHeight);
     }
 
