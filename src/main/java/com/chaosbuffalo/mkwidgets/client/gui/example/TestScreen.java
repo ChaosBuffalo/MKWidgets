@@ -2,9 +2,11 @@ package com.chaosbuffalo.mkwidgets.client.gui.example;
 
 import com.chaosbuffalo.mkwidgets.MKWidgets;
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.*;
+import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKLayout;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutHorizontal;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutVertical;
+import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.MKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.*;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -58,7 +60,34 @@ public class TestScreen extends MKScreen {
             pushState("popupDemo");
             return true;
         });
+        MKButton tooltipDemo = new MKButton("Tooltip Demo");
+        root.addWidget(tooltipDemo);
+        root.addConstraintToWidget(new VerticalStackConstraint(), tooltipDemo);
+        root.addConstraintToWidget(new CenterXConstraint(), tooltipDemo);
+        tooltipDemo.setPressedCallback((button, mouseButton) -> {
+            pushState("tooltipDemo");
+            return true;
+        });
         return root;
+    }
+
+    private MKLayout getToolTipTest(int xPos, int yPos){
+        MKText textWithLongHover = new MKText(font, "This text will have tooltip."){
+            @Override
+            public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+                IMKScreen screen = getScreen();
+                if (screen != null){
+                    screen.addHoveringText(new HoveringTextInstruction("This is a tooltip.", mouseX, mouseY));
+                }
+            }
+        };
+        MKLayout root = getRootWithTitle(xPos, yPos, "Tooltip Test");
+        root.addWidget(textWithLongHover);
+        root.addConstraintToWidget(new CenterXConstraint(), textWithLongHover);
+        root.addConstraintToWidget(new LayoutRelativeYPosConstraint(.5f), textWithLongHover);
+        addBackButton(root);
+        return root;
+
     }
 
     private MKLayout getPopupTest(int xPos, int yPos){
@@ -198,6 +227,8 @@ public class TestScreen extends MKScreen {
         addState("imageBox", imageDemo);
         MKLayout popupDemo = getPopupTest(xPos, yPos);
         addState("popupDemo", popupDemo);
+        MKLayout tooltipDemo = getToolTipTest(xPos, yPos);
+        addState("tooltipDemo", tooltipDemo);
         pushState("intro");
     }
 
