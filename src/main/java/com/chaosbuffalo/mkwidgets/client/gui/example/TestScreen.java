@@ -19,6 +19,7 @@ public class TestScreen extends MKScreen {
             "textures/gui/background_320.png");
     private static final ResourceLocation CB_LOGO = new ResourceLocation(MKWidgets.MODID,
             "textures/gui/chaosbuffalologo.png");
+    private MKModal testPopup;
 
     public TestScreen(ITextComponent title) {
         super(title);
@@ -49,6 +50,39 @@ public class TestScreen extends MKScreen {
             pushState("imageBox");
             return true;
         });
+        MKButton popupDemo = new MKButton("Popup Demo");
+        root.addWidget(popupDemo);
+        root.addConstraintToWidget(new VerticalStackConstraint(), popupDemo);
+        root.addConstraintToWidget(new CenterXConstraint(), popupDemo);
+        popupDemo.setPressedCallback((button, mouseButton) -> {
+            pushState("popupDemo");
+            return true;
+        });
+        return root;
+    }
+
+    private MKLayout getPopupTest(int xPos, int yPos){
+        MKLayout root = getRootWithTitle(xPos, yPos, "Popup Test");
+        MKButton openPopup = new MKButton("Open Popup");
+        root.addWidget(openPopup);
+        root.addConstraintToWidget(new VerticalStackConstraint(), openPopup);
+        root.addConstraintToWidget(new CenterXConstraint(), openPopup);
+        testPopup = new MKModal();
+        MKLayout popupContents = new MKLayout(xPos, yPos, PANEL_WIDTH, PANEL_HEIGHT);
+        testPopup.addWidget(popupContents);
+        MKButton closePopup = new MKButton("Close Popup");
+        popupContents.addWidget(closePopup);
+        popupContents.addConstraintToWidget(new CenterXConstraint(), closePopup);
+        popupContents.addConstraintToWidget(new LayoutRelativeYPosConstraint(.5f), closePopup);
+        closePopup.setPressedCallback((button, mouseButton) ->{
+            this.closeModal(testPopup);
+            return true;
+        });
+        openPopup.setPressedCallback((button, mouseButton) -> {
+            this.addModal(testPopup);
+            return true;
+        });
+        addBackButton(root);
         return root;
     }
 
@@ -162,6 +196,8 @@ public class TestScreen extends MKScreen {
         addState("testList", testList);
         MKLayout imageDemo = imageBoxDemo(xPos, yPos);
         addState("imageBox", imageDemo);
+        MKLayout popupDemo = getPopupTest(xPos, yPos);
+        addState("popupDemo", popupDemo);
         pushState("intro");
     }
 

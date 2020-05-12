@@ -10,8 +10,8 @@ public class MKModal extends MKWidget implements IMKModal {
     private boolean closeOnClickOutsideContent;
     private Runnable onCloseCallback;
 
-    public MKModal(int width, int height) {
-        super(0, 0, width, height);
+    public MKModal() {
+        super(0, 0, 200, 20);
         doBackground = true;
         backgroundColor = 0x7D000000;
         closeOnClickOutsideContent = true;
@@ -72,7 +72,7 @@ public class MKModal extends MKWidget implements IMKModal {
     public void preDraw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         super.preDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         if (shouldDoBackground()) {
-            fill(getX(), getY(), getWidth(), getHeight(), getBackgroundColor());
+            mkFill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), getBackgroundColor());
         }
     }
 }
