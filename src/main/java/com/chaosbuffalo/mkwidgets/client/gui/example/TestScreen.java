@@ -73,17 +73,8 @@ public class TestScreen extends MKScreen {
     }
 
     private MKLayout getToolTipTest(int xPos, int yPos){
-        MKText textWithLongHover = new MKText(font, "This text will have tooltip."){
-            @Override
-            public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-                IMKScreen screen = getScreen();
-                if (screen != null){
-                    // tooltips are added in screen space so we need to climb the widget tree to the top.
-                    Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
-                    screen.addPostRenderInstruction(new HoveringTextInstruction("This is a tooltip.", parentPos));
-                }
-            }
-        };
+        MKText textWithLongHover = new MKText(font, "This text will have tooltip.");
+        textWithLongHover.setTooltip("This is a tooltip.");
         MKLayout root = getRootWithTitle(xPos, yPos, "Tooltip Test");
         root.addWidget(textWithLongHover);
         root.addConstraintToWidget(new CenterXConstraint(), textWithLongHover);
@@ -203,20 +194,9 @@ public class TestScreen extends MKScreen {
         MKStackLayoutVertical verticalLayout = new MKStackLayoutVertical(0, 0, 120);
         verticalLayout.doSetChildWidth(true).setPaddingBot(5).setMarginTop(5).setMarginRight(5).setMarginLeft(5).setMarginBot(5);
         for (int i = 0; i < 25; i++){
-            MKText testText = new MKText(this.font, String.format("Test Text: %d", i)){
-                @Override
-                public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX,
-                                          int mouseY, float partialTicks) {
-                    MKWidgets.LOGGER.info("Long hover for test text");
-                    IMKScreen screen = getScreen();
-                    if (screen != null){
-                        // tooltips are added in screen space so we need to climb the widget tree to the top.
-                        Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
-                        screen.addPostRenderInstruction(new HoveringTextInstruction(getText().getFormattedText(),
-                                parentPos));
-                    }
-                }
-            };
+            String buttonText = String.format("Test Text: %d", i);
+            MKText testText = new MKText(this.font, buttonText);
+            testText.setTooltip(buttonText);
             testText.setIsCentered(true);
             testText.setDebugColor(0x3f0000ff);
             verticalLayout.addWidget(testText);

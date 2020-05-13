@@ -149,6 +149,10 @@ public interface IMKWidget {
         }
     }
 
+    IMKWidget setTooltip(String newTooltip);
+
+    void clearTooltip();
+
     default void handleHoverDetection(int mouseX, int mouseY, float partialTicks) {
         boolean hovered = checkHovered(mouseX, mouseY);
         if (hovered) {
@@ -158,6 +162,7 @@ public interface IMKWidget {
         }
         setHovered(hovered);
     }
+
 
     default void clearHovered(){
         setHoveredTicks(0);

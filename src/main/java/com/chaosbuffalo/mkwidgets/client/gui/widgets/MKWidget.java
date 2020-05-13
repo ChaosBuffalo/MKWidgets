@@ -1,5 +1,7 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
+import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
+import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.UIConstants;
 import net.minecraft.client.Minecraft;
@@ -26,6 +28,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     private boolean visible;
     private int debugColor;
     private boolean drawDebug;
+    private String tooltip;
 
     public MKWidget(int x, int y, int width, int height){
         id = UUID.randomUUID();
@@ -42,6 +45,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
         skipBoundsCheck = false;
         visible = true;
         screen = null;
+        tooltip = null;
         debugColor = 0x3fffffff;
     }
 
@@ -64,6 +68,16 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     @Override
     public void setDrawDebug(boolean value) {
         drawDebug = value;
+    }
+
+    @Override
+    public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        IMKScreen screen = getScreen();
+        if (tooltip != null && screen != null){
+            // tooltips are added in screen space so we need to climb the widget tree to the top.
+            Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
+            screen.addPostRenderInstruction(new HoveringTextInstruction(tooltip, parentPos));
+        }
     }
 
     @Override
@@ -211,6 +225,17 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     @Override
     public void setHoveredTicks(float value) {
         hoveredTicks = value;
+    }
+
+    @Override
+    public IMKWidget setTooltip(String newTooltip) {
+        tooltip = newTooltip;
+        return this;
+    }
+
+    @Override
+    public void clearTooltip() {
+        tooltip = null;
     }
 
 
