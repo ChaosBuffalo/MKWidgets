@@ -65,7 +65,7 @@ public class MKText extends MKWidget {
     }
 
     public MKText setIsCentered(boolean isCentered) {
-        this.isCentered = true;
+        this.isCentered = isCentered;
         return this;
     }
 
