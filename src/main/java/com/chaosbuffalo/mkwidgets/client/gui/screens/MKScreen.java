@@ -200,6 +200,7 @@ public class MKScreen extends Screen implements IMKScreen {
         clearWidgets();
         clearPreDrawRunnables();
         this.states.clear();
+        this.stateCache.clear();
     }
 
     public void flagNeedSetup() {
