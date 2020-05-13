@@ -159,6 +159,14 @@ public interface IMKWidget {
         setHovered(hovered);
     }
 
+    default void clearHovered(){
+        setHoveredTicks(0);
+        setHovered(false);
+        for (IMKWidget child : getChildren()){
+            child.clearHovered();
+        }
+    }
+
     boolean doDrawDebugBounds();
 
     default void drawDebugBounds(Minecraft mc, int x, int y, int width, int height, int mouseX,
@@ -172,8 +180,32 @@ public interface IMKWidget {
 
     int getDebugColor();
 
-    default void drawWidget(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    default void onMouseHover(Minecraft mc, int mouseX, int mouseY, float partialTicks){
         handleHoverDetection(mouseX, mouseY, partialTicks);
+    }
+
+    default void mouseHover(Minecraft mc, int mouseX, int mouseY, float partialTicks){
+        if (!checkHovered(mouseX, mouseY)){
+            clearHovered();
+            return;
+        }
+        for (IMKWidget child : getChildren()) {
+            if (child.isVisible() && child.isEnabled()) {
+                child.mouseHover(mc, mouseX, mouseY, partialTicks);
+            }
+        }
+        onMouseHover(mc, mouseX, mouseY, partialTicks);
+    }
+
+    default void drawChildren(Minecraft mc, int mouseX, int mouseY, float partialTicks){
+        for (IMKWidget child : getChildren()) {
+            if (child.isVisible()) {
+                child.drawWidget(mc, mouseX, mouseY, partialTicks);
+            }
+        }
+    }
+
+    default void drawWidget(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         int x = getX();
         int y = getY();
         int width = getWidth();
@@ -183,11 +215,7 @@ public interface IMKWidget {
         }
         preDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         draw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
-        for (IMKWidget child : getChildren()) {
-            if (child.isVisible()) {
-                child.drawWidget(mc, mouseX, mouseY, partialTicks);
-            }
-        }
+        drawChildren(mc, mouseX, mouseY, partialTicks);
         postDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
         handleLongHoverDraw(mc, x, y, width, height, mouseX, mouseY, partialTicks);
     }

@@ -6,6 +6,7 @@ import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstructio
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKLayout;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutHorizontal;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutVertical;
+import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.MKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.*;
@@ -77,7 +78,8 @@ public class TestScreen extends MKScreen {
             public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
                 IMKScreen screen = getScreen();
                 if (screen != null){
-                    screen.addHoveringText(new HoveringTextInstruction("This is a tooltip.", mouseX, mouseY));
+                    Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
+                    screen.addHoveringText(new HoveringTextInstruction("This is a tooltip.", parentPos));
                 }
             }
         };
@@ -200,7 +202,18 @@ public class TestScreen extends MKScreen {
         MKStackLayoutVertical verticalLayout = new MKStackLayoutVertical(0, 0, 120);
         verticalLayout.doSetChildWidth(true).setPaddingBot(5).setMarginTop(5).setMarginRight(5).setMarginLeft(5).setMarginBot(5);
         for (int i = 0; i < 25; i++){
-            MKText testText = new MKText(this.font, String.format("Test Text: %d", i));
+            MKText testText = new MKText(this.font, String.format("Test Text: %d", i)){
+                @Override
+                public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX,
+                                          int mouseY, float partialTicks) {
+                    MKWidgets.LOGGER.info("Long hover for test text");
+                    IMKScreen screen = getScreen();
+                    if (screen != null){
+                        Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
+                        screen.addHoveringText(new HoveringTextInstruction(getText().getFormattedText(), parentPos));
+                    }
+                }
+            };
             testText.setIsCentered(true);
             testText.setDebugColor(0x3f0000ff);
             verticalLayout.addWidget(testText);

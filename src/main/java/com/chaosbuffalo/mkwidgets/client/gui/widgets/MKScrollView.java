@@ -1,5 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
+import com.chaosbuffalo.mkwidgets.MKWidgets;
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import net.minecraft.client.Minecraft;
@@ -254,19 +255,27 @@ public class MKScrollView extends MKWidget {
     }
 
     @Override
-    public void drawWidget(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (doDrawDebugBounds()){
-            drawDebugBounds(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
+    public void mouseHover(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (!checkHovered(mouseX, mouseY)){
+            return;
         }
-        preDraw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
-        draw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
+        for (IMKWidget child : getChildren()) {
+            if (child.isVisible() && child.isEnabled()) {
+                child.mouseHover(mc, mouseX - getIntOffsetX(), mouseY - getIntOffsetY(), partialTicks);
+            }
+        }
+        onMouseHover(mc, mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    public void drawChildren(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         for (IMKWidget child : getChildren()) {
             if (child.isVisible()) {
                 child.drawWidget(mc, mouseX - getIntOffsetX(), mouseY - getIntOffsetY(), partialTicks);
             }
         }
-        postDraw(mc, getX(), getY(), getWidth(), getHeight(), mouseX, mouseY, partialTicks);
     }
+
 
     @Override
     public IMKWidget mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
