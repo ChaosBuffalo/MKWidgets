@@ -1,9 +1,9 @@
 package com.chaosbuffalo.mkwidgets.client.gui.screens;
 
 import com.chaosbuffalo.mkwidgets.MKWidgets;
+import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
@@ -19,7 +19,7 @@ public class MKScreen extends Screen implements IMKScreen {
     public HashMap<String, IMKWidget> states;
     private final ArrayList<Runnable> postSetupCallbacks;
     private final ArrayList<Runnable> preDrawRunnables;
-    private final ArrayList<HoveringTextInstruction> hoveringText;
+    private final ArrayList<IInstruction> postRenderInstructions;
     private final ArrayDeque<IMKModal> modals;
 
     public MKScreen(ITextComponent title) {
@@ -31,7 +31,7 @@ public class MKScreen extends Screen implements IMKScreen {
         postSetupCallbacks = new ArrayList<>();
         selectedWidgets = new HashMap<>();
         preDrawRunnables = new ArrayList<>();
-        hoveringText = new ArrayList<>();
+        postRenderInstructions = new ArrayList<>();
         modals = new ArrayDeque<>();
     }
 
@@ -72,8 +72,8 @@ public class MKScreen extends Screen implements IMKScreen {
 
 
     @Override
-    public void addHoveringText(HoveringTextInstruction instruction) {
-        hoveringText.add(instruction);
+    public void addPostRenderInstruction(IInstruction instruction) {
+        postRenderInstructions.add(instruction);
     }
 
     @Override
@@ -247,10 +247,10 @@ public class MKScreen extends Screen implements IMKScreen {
                 modal.drawWidget(this.minecraft, mouseX, mouseY, partialTicks);
             }
         }
-        for (HoveringTextInstruction instruction : hoveringText) {
+        for (IInstruction instruction : postRenderInstructions) {
             instruction.draw(getMinecraft().fontRenderer, this.width, this.height);
         }
-        hoveringText.clear();
+        postRenderInstructions.clear();
     }
 
     @Override
@@ -313,7 +313,7 @@ public class MKScreen extends Screen implements IMKScreen {
     public void clear() {
         clearWidgets();
         clearModals();
-        hoveringText.clear();
+        postRenderInstructions.clear();
     }
 
 

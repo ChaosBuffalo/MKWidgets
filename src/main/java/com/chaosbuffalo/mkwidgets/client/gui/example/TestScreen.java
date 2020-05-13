@@ -80,7 +80,7 @@ public class TestScreen extends MKScreen {
                 if (screen != null){
                     // tooltips are added in screen space so we need to climb the widget tree to the top.
                     Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
-                    screen.addHoveringText(new HoveringTextInstruction("This is a tooltip.", parentPos));
+                    screen.addPostRenderInstruction(new HoveringTextInstruction("This is a tooltip.", parentPos));
                 }
             }
         };
@@ -212,7 +212,8 @@ public class TestScreen extends MKScreen {
                     if (screen != null){
                         // tooltips are added in screen space so we need to climb the widget tree to the top.
                         Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
-                        screen.addHoveringText(new HoveringTextInstruction(getText().getFormattedText(), parentPos));
+                        screen.addPostRenderInstruction(new HoveringTextInstruction(getText().getFormattedText(),
+                                parentPos));
                     }
                 }
             };

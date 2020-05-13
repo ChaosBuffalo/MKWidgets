@@ -1,6 +1,7 @@
 package com.chaosbuffalo.mkwidgets.client.gui.screens;
 
 
+import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
@@ -11,7 +12,7 @@ public interface IMKScreen {
 
     void closeModal(IMKModal modal);
 
-    void addHoveringText(HoveringTextInstruction instruction);
+    void addPostRenderInstruction(IInstruction instruction);
 
     void addPreDrawRunnable(Runnable runnable);
 

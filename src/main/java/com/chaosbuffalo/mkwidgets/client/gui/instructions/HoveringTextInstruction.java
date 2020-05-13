@@ -6,7 +6,7 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 
-public class HoveringTextInstruction {
+public class HoveringTextInstruction implements IInstruction {
 
     public ArrayList<String> texts;
     public Vec2i mousePos;
@@ -30,7 +30,8 @@ public class HoveringTextInstruction {
         texts.add(text);
     }
 
-    public void draw(FontRenderer renderer, int width, int height) {
-        GuiUtils.drawHoveringText(texts, mousePos.x, mousePos.y, width, height, -1, renderer);
+    @Override
+    public void draw(FontRenderer renderer, int screenWidth, int screenHeight) {
+        GuiUtils.drawHoveringText(texts, mousePos.x, mousePos.y, screenWidth, screenHeight, -1, renderer);
     }
 }
