@@ -4,7 +4,8 @@ package com.chaosbuffalo.mkwidgets.client.gui.screens;
 import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstruction;
+
+import java.util.function.Supplier;
 
 public interface IMKScreen {
 
@@ -26,7 +27,7 @@ public interface IMKScreen {
 
     void removeState(String name);
 
-    void addState(String name, IMKWidget root);
+    void addState(String name, Supplier<IMKWidget> root);
 
     void pushState(String newState);
 

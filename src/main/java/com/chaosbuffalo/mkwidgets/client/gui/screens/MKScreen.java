@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class MKScreen extends Screen implements IMKScreen {
     public final ArrayDeque<IMKWidget> children;
@@ -16,7 +17,8 @@ public class MKScreen extends Screen implements IMKScreen {
     private final HashMap<Integer, IMKWidget> selectedWidgets;
     public boolean firstRender;
     private final Stack<String> stateStack;
-    public HashMap<String, IMKWidget> states;
+    public HashMap<String, Supplier<IMKWidget>> states;
+    private final HashMap<String, IMKWidget> stateCache;
     private final ArrayList<Runnable> postSetupCallbacks;
     private final ArrayList<Runnable> preDrawRunnables;
     private final ArrayList<IInstruction> postRenderInstructions;
@@ -31,6 +33,7 @@ public class MKScreen extends Screen implements IMKScreen {
         postSetupCallbacks = new ArrayList<>();
         selectedWidgets = new HashMap<>();
         preDrawRunnables = new ArrayList<>();
+        stateCache = new HashMap<>();
         postRenderInstructions = new ArrayList<>();
         modals = new ArrayDeque<>();
     }
@@ -131,7 +134,7 @@ public class MKScreen extends Screen implements IMKScreen {
     }
 
     @Override
-    public void addState(String name, IMKWidget root) {
+    public void addState(String name, Supplier<IMKWidget> root) {
         this.states.put(name, root);
     }
 
@@ -150,13 +153,17 @@ public class MKScreen extends Screen implements IMKScreen {
         }
     }
 
+    private IMKWidget getStateFromCache(String newState){
+        return stateCache.computeIfAbsent(newState, (key) -> states.get(key).get());
+    }
+
     private boolean handleStateTransition(String newState, String oldState){
         if (newState.equals(NO_STATE) || states.containsKey(newState)) {
             if (!oldState.equals(NO_STATE)) {
-                this.removeWidget(states.get(oldState));
+                this.removeWidget(getStateFromCache(oldState));
             }
             if (!newState.equals(NO_STATE)) {
-                this.addWidget(states.get(newState));
+                this.addWidget(getStateFromCache(newState));
             }
             return true;
         } else {

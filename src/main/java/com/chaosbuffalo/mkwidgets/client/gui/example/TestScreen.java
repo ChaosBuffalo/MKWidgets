@@ -213,16 +213,11 @@ public class TestScreen extends MKScreen {
         super.setupScreen();
         int xPos = width / 2 - PANEL_WIDTH / 2;
         int yPos = height / 2 - PANEL_HEIGHT / 2;
-        MKLayout intro = getIntro(xPos, yPos);
-        addState("intro", intro);
-        MKLayout testList = textListDemo(xPos, yPos);
-        addState("testList", testList);
-        MKLayout imageDemo = imageBoxDemo(xPos, yPos);
-        addState("imageBox", imageDemo);
-        MKLayout popupDemo = getPopupTest(xPos, yPos);
-        addState("popupDemo", popupDemo);
-        MKLayout tooltipDemo = getToolTipTest(xPos, yPos);
-        addState("tooltipDemo", tooltipDemo);
+        addState("intro", () -> getIntro(xPos, yPos));
+        addState("testList", () -> textListDemo(xPos, yPos));
+        addState("imageBox", () -> imageBoxDemo(xPos, yPos));
+        addState("popupDemo", () -> getPopupTest(xPos, yPos));
+        addState("tooltipDemo", () -> getToolTipTest(xPos, yPos));
         pushState("intro");
     }
 
