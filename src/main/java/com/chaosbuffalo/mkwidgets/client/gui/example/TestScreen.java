@@ -189,6 +189,7 @@ public class TestScreen extends MKScreen {
         MKLayout root = getRootWithTitle(xPos, yPos, "Scrollable List Demo");
         MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, true);
         root.addWidget(scrollView);
+        scrollView.setScrollVelocity(3.0);
         root.addConstraintToWidget(new VerticalStackConstraint(), scrollView);
         root.addConstraintToWidget(new CenterXConstraint(), scrollView);
         MKStackLayoutVertical verticalLayout = new MKStackLayoutVertical(0, 0, 120);

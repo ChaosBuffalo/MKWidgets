@@ -23,6 +23,7 @@ public class MKScrollView extends MKWidget {
     private int scrollMarginY;
     private boolean doScrollX;
     private boolean doScrollY;
+    private double scrollVelocity;
     private boolean drawScrollBars;
     private static final int SCROLL_BAR_WIDTH = 1;
 
@@ -39,6 +40,7 @@ public class MKScrollView extends MKWidget {
         scrollMarginY = 0;
         doScrollX = true;
         doScrollY = true;
+        scrollVelocity = 1.0;
         drawScrollBars = true;
     }
 
@@ -47,6 +49,10 @@ public class MKScrollView extends MKWidget {
     }
 
 
+    public MKScrollView setScrollVelocity(double vel){
+        scrollVelocity = vel;
+        return this;
+    }
 
     @Override
     public IMKWidget setScreen(IMKScreen screen) {
@@ -70,7 +76,7 @@ public class MKScrollView extends MKWidget {
 
     @Override
     public boolean onMouseScrollWheel(Minecraft minecraft, double mouseX, double mouseY, double amount) {
-        double dY = amount;
+        double dY = amount * scrollVelocity;
         if (isScrollLockOn()) {
             IMKWidget child = getChild();
             if (child != null) {
