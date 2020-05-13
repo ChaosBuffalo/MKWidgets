@@ -195,9 +195,7 @@ public interface IMKWidget {
             return;
         }
         for (IMKWidget child : getChildren()) {
-            if (child.isVisible() && child.isEnabled()) {
-                child.mouseHover(mc, mouseX, mouseY, partialTicks);
-            }
+            child.mouseHover(mc, mouseX, mouseY, partialTicks);
         }
         onMouseHover(mc, mouseX, mouseY, partialTicks);
     }

@@ -263,6 +263,7 @@ public class MKScrollView extends MKWidget {
     @Override
     public void mouseHover(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (!checkHovered(mouseX, mouseY)){
+            clearHovered();
             return;
         }
         for (IMKWidget child : getChildren()) {
