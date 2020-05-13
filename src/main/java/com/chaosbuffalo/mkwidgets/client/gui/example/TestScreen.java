@@ -78,6 +78,7 @@ public class TestScreen extends MKScreen {
             public void longHoverDraw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
                 IMKScreen screen = getScreen();
                 if (screen != null){
+                    // tooltips are added in screen space so we need to climb the widget tree to the top.
                     Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
                     screen.addHoveringText(new HoveringTextInstruction("This is a tooltip.", parentPos));
                 }
@@ -209,6 +210,7 @@ public class TestScreen extends MKScreen {
                     MKWidgets.LOGGER.info("Long hover for test text");
                     IMKScreen screen = getScreen();
                     if (screen != null){
+                        // tooltips are added in screen space so we need to climb the widget tree to the top.
                         Vec2i parentPos = getParentCoords(new Vec2i(mouseX, mouseY));
                         screen.addHoveringText(new HoveringTextInstruction(getText().getFormattedText(), parentPos));
                     }
