@@ -45,9 +45,7 @@ public class MKWidgets
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onEvent(InputEvent.KeyInputEvent event){
-        LOGGER.info("In key press {}", event);
         if (openTestUi.isPressed()){
-            LOGGER.info("Opening test ui");
             Minecraft.getInstance().displayGuiScreen(new TestScreen(
                     new StringTextComponent("MK Widgets Test")));
         }

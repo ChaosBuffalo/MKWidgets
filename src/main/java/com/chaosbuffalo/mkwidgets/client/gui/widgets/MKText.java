@@ -21,6 +21,10 @@ public class MKText extends MKWidget {
         this.isMultiline = false;
     }
 
+    public MKText(FontRenderer renderer, ITextComponent text){
+        this(renderer, text, 200, renderer.FONT_HEIGHT);
+    }
+
     public MKText(FontRenderer renderer, String text) {
         this(renderer, text, 200);
     }
