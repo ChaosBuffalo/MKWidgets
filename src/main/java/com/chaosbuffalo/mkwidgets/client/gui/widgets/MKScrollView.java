@@ -1,6 +1,5 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
-import com.chaosbuffalo.mkwidgets.MKWidgets;
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import net.minecraft.client.Minecraft;
@@ -285,25 +284,25 @@ public class MKScrollView extends MKWidget {
 
 
     @Override
-    public IMKWidget mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
+    public boolean mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
-            return null;
+            return false;
         }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
-            if (child.mousePressed(minecraft, mouseX - offsetX, mouseY - offsetY, mouseButton) != null) {
-                return child;
+            if (child.mousePressed(minecraft, mouseX - offsetX, mouseY - offsetY, mouseButton)) {
+                return true;
             }
         }
-        if (onMousePressed(minecraft, mouseX, mouseY, mouseButton)) {
-            return this;
-        }
-        return null;
+        return onMousePressed(minecraft, mouseX, mouseY, mouseButton);
     }
 
     @Override
     public boolean mouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton, double dX, double dY) {
+        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+            return false;
+        }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
@@ -311,14 +310,14 @@ public class MKScrollView extends MKWidget {
                 return true;
             }
         }
-        if (onMouseDragged(minecraft, mouseX, mouseY, mouseButton, dX, dY)) {
-            return true;
-        }
-        return false;
+        return onMouseDragged(minecraft, mouseX, mouseY, mouseButton, dX, dY);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+            return false;
+        }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
@@ -326,10 +325,7 @@ public class MKScrollView extends MKWidget {
                 return true;
             }
         }
-        if (onMouseRelease(mouseX, mouseY, mouseButton)) {
-            return true;
-        }
-        return false;
+        return onMouseRelease(mouseX, mouseY, mouseButton);
     }
 
 

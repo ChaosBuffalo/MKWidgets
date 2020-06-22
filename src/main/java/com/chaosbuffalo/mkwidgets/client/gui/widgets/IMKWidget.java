@@ -255,6 +255,9 @@ public interface IMKWidget {
 
     default boolean mouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton,
                                  double dX, double dY) {
+        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+            return false;
+        }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
@@ -271,6 +274,9 @@ public interface IMKWidget {
     }
 
     default boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+            return false;
+        }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
@@ -285,22 +291,18 @@ public interface IMKWidget {
         return false;
     }
 
-    default IMKWidget mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
+    default boolean mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
-            return null;
+            return false;
         }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
-            IMKWidget result = child.mousePressed(minecraft, mouseX, mouseY, mouseButton);
-            if (result != null) {
-                return result;
+            if (child.mousePressed(minecraft, mouseX, mouseY, mouseButton)) {
+                return true;
             }
         }
-        if (onMousePressed(minecraft, mouseX, mouseY, mouseButton)) {
-            return this;
-        }
-        return null;
+        return onMousePressed(minecraft, mouseX, mouseY, mouseButton);
     }
 
     default boolean onMousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {

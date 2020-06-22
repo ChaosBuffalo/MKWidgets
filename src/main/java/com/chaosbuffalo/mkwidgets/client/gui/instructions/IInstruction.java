@@ -4,5 +4,5 @@ import net.minecraft.client.gui.FontRenderer;
 
 public interface IInstruction {
 
-    void draw(FontRenderer renderer, int screenWidth, int screenHeight);
+    void draw(FontRenderer renderer, int screenWidth, int screenHeight, float partialTicks);
 }

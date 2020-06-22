@@ -13,8 +13,8 @@ public class MKText extends MKWidget {
     public boolean isMultiline;
     public boolean isCentered;
 
-    public MKText(FontRenderer renderer, ITextComponent text, int width, int height){
-        super(0, 0, width, height);
+    public MKText(FontRenderer renderer, ITextComponent text, int x, int y, int width, int height){
+        super(x, y, width, height);
         this.color = 0;
         this.fontRenderer = renderer;
         this.text = text;
@@ -25,12 +25,20 @@ public class MKText extends MKWidget {
         this(renderer, text, 200, renderer.FONT_HEIGHT);
     }
 
+    public MKText(FontRenderer renderer, ITextComponent text, int x, int y){
+        this(renderer, text, x, y, 200, renderer.FONT_HEIGHT);
+    }
+
     public MKText(FontRenderer renderer, String text) {
         this(renderer, text, 200);
     }
 
-    public MKText(FontRenderer renderer, String text, int width, int height){
-        this(renderer, new StringTextComponent(text), width, height);
+    public MKText(FontRenderer renderer, String text, int x, int y){
+        this(renderer, text, x, y, 200, renderer.FONT_HEIGHT);
+    }
+
+    public MKText(FontRenderer renderer, String text, int x, int y, int width, int height){
+        this(renderer, new StringTextComponent(text), x, y, width, height);
     }
 
     public MKText(FontRenderer renderer, String text, int width){

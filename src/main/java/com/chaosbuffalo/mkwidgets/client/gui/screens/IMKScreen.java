@@ -1,10 +1,12 @@
 package com.chaosbuffalo.mkwidgets.client.gui.screens;
 
 
+import com.chaosbuffalo.mkwidgets.client.gui.actions.IDragState;
 import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public interface IMKScreen {
@@ -26,6 +28,12 @@ public interface IMKScreen {
     void addPostSetupCallback(Runnable callback);
 
     void removeState(String name);
+
+    void setDragState(IDragState dragState);
+
+    Optional<IDragState> getDragState();
+
+    void clearDragState();
 
     void addState(String name, Supplier<IMKWidget> root);
 

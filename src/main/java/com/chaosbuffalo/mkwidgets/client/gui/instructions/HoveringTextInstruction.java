@@ -31,7 +31,7 @@ public class HoveringTextInstruction implements IInstruction {
     }
 
     @Override
-    public void draw(FontRenderer renderer, int screenWidth, int screenHeight) {
+    public void draw(FontRenderer renderer, int screenWidth, int screenHeight, float partialTicks) {
         GuiUtils.drawHoveringText(texts, mousePos.x, mousePos.y, screenWidth, screenHeight, -1, renderer);
     }
 }
