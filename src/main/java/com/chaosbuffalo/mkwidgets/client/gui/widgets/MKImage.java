@@ -1,5 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
+import com.chaosbuffalo.mkwidgets.client.gui.math.IntColor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +13,7 @@ public class MKImage extends MKWidget {
     private int texHeight;
     private int sourceWidth;
     private int sourceHeight;
+    private IntColor color;
 
     public MKImage(int x, int y, int width, int height, ResourceLocation imageLoc) {
         this(x, y, width, height, width, height, 0, 0, width, height, imageLoc);
@@ -29,11 +31,20 @@ public class MKImage extends MKWidget {
         this.sourceWidth = sourceWidth;
         texWidth = imageWidth;
         texHeight = imageHeight;
+        color = new IntColor(0xffffffff);
     }
 
     public MKImage setTexU(int value) {
         texU = value;
         return this;
+    }
+
+    public IntColor getColor() {
+        return color;
+    }
+
+    public void setColor(IntColor color) {
+        this.color = color;
     }
 
     public int getSourceWidth() {
@@ -97,10 +108,11 @@ public class MKImage extends MKWidget {
     @Override
     public void draw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.disableDepthTest();
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.color4f(color.getRedF(), color.getBlueF(), color.getGreenF(), color.getAlphaF());
         mc.getTextureManager().bindTexture(getImageLoc());
         mkBlitUVSizeDifferent(getX(), getY(), getWidth(), getHeight(),
                 (float)getTexU(), (float)getTexV(), getTexWidth(), getTexHeight(), getSourceWidth(), getSourceHeight());
         RenderSystem.enableDepthTest();
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

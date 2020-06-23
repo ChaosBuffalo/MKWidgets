@@ -1,5 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
+import com.chaosbuffalo.mkwidgets.client.gui.actions.IDragState;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import net.minecraft.client.Minecraft;
@@ -251,6 +252,10 @@ public interface IMKWidget {
             }
         }
         return onMouseScrollWheel(minecraft, mouseX, mouseY, distance);
+    }
+
+    default void onDragEnd(IDragState state){
+
     }
 
     default boolean mouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton,

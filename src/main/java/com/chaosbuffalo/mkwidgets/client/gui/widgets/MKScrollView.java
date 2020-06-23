@@ -39,7 +39,7 @@ public class MKScrollView extends MKWidget {
         scrollMarginY = 0;
         doScrollX = true;
         doScrollY = true;
-        scrollVelocity = 1.0;
+        scrollVelocity = 20.0;
         drawScrollBars = true;
     }
 

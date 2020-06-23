@@ -29,7 +29,9 @@ public interface IMKScreen {
 
     void removeState(String name);
 
-    void setDragState(IDragState dragState);
+    void setDragState(IDragState dragState, IMKWidget source);
+
+    IMKWidget getDragSource();
 
     Optional<IDragState> getDragState();
 

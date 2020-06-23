@@ -24,6 +24,7 @@ public class MKScreen extends Screen implements IMKScreen {
     private final ArrayList<IInstruction> postRenderInstructions;
     private final ArrayDeque<IMKModal> modals;
     private IDragState dragState;
+    private IMKWidget dragSource;
 
     public MKScreen(ITextComponent title) {
         super(title);
@@ -144,12 +145,22 @@ public class MKScreen extends Screen implements IMKScreen {
     }
 
     @Override
-    public void setDragState(IDragState dragState) {
+    public void setDragState(IDragState dragState, IMKWidget source) {
         this.dragState = dragState;
+        this.dragSource = source;
+    }
+
+    @Override
+    public IMKWidget getDragSource() {
+        return dragSource;
     }
 
     @Override
     public void clearDragState() {
+        if (dragSource != null){
+            this.dragSource.onDragEnd(dragState);
+        }
+        this.dragSource = null;
         this.dragState = null;
     }
 
