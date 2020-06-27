@@ -13,7 +13,7 @@ public class LayoutRelativeHeightConstraint extends BaseConstraint {
 
     @Override
     public void applyConstraint(IMKLayout layout, IMKWidget widget, int widgetIndex) {
-        float availableSpace = layout.getHeight() - layout.getMarginTop() - layout.getMarginBot();
+        float availableSpace = getAvailableHeight(layout);
         widget.setHeight(Math.round(availableSpace * heightScale));
     }
 }
