@@ -31,7 +31,18 @@ public class MKLayout extends MKWidget implements IMKLayout {
         needsRecompute = true;
     }
 
+    public void computeChildLayouts(){
+        for (IMKWidget child : getChildren()){
+            if (child instanceof MKLayout){
+                if (((MKLayout) child).needsRecompute){
+                    ((MKLayout) child).manualRecompute();
+                }
+            }
+        }
+    }
+
     public void recomputeChildren() {
+        computeChildLayouts();
         preLayout();
         int i = 0;
         for (IMKWidget child : getChildren()) {

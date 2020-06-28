@@ -42,7 +42,7 @@ public class MKText extends MKWidget {
     }
 
     public MKText(FontRenderer renderer, String text, int width){
-        this(renderer, text, width, renderer.FONT_HEIGHT);
+        this(renderer, text, 0, 0, width, renderer.FONT_HEIGHT);
     }
 
     public int getFontHeight() {
