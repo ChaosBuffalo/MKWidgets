@@ -5,18 +5,19 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HoveringTextInstruction implements IInstruction {
 
-    public ArrayList<String> texts;
+    public List<String> texts;
     public Vec2i mousePos;
 
-    public HoveringTextInstruction(ArrayList<String> texts, Vec2i mousePos) {
+    public HoveringTextInstruction(List<String> texts, Vec2i mousePos) {
         this.texts = texts;
         this.mousePos = mousePos;
     }
 
-    public HoveringTextInstruction(ArrayList<String> texts, int x, int y) {
+    public HoveringTextInstruction(List<String> texts, int x, int y) {
         this(texts, new Vec2i(x, y));
     }
 
