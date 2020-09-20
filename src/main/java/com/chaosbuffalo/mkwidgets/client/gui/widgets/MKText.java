@@ -63,7 +63,7 @@ public class MKText extends MKWidget {
         if (isCentered()) {
             this.drawCenteredStringNoDropShadow(this.fontRenderer, formattedText,
                     this.getX() + this.getWidth() / 2,
-                    this.getY(), color);
+                    this.getY() + (this.getHeight() - this.fontRenderer.FONT_HEIGHT) / 2, color);
         } else if (isMultiline()) {
             fontRenderer.drawSplitString(formattedText, this.getX(), this.getY(), this.getWidth(), this.color);
         } else {
