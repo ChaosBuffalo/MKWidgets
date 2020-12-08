@@ -1,6 +1,7 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
 import com.chaosbuffalo.mkwidgets.client.gui.math.IntColor;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -106,12 +107,13 @@ public class MKImage extends MKWidget {
     }
 
     @Override
-    public void draw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y,
+                     int width, int height, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.disableDepthTest();
         RenderSystem.color4f(color.getRedF(), color.getBlueF(), color.getGreenF(), color.getAlphaF());
         mc.getTextureManager().bindTexture(getImageLoc());
-        mkBlitUVSizeDifferent(getX(), getY(), getWidth(), getHeight(),
-                (float)getTexU(), (float)getTexV(), getTexWidth(), getTexHeight(), getSourceWidth(), getSourceHeight());
+        mkBlitUVSizeDifferent(matrixStack, getX(), getY(), getWidth(),
+                getHeight(), (float)getTexU(), (float)getTexV(), getTexWidth(), getTexHeight(), getSourceWidth(), getSourceHeight());
         RenderSystem.enableDepthTest();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }

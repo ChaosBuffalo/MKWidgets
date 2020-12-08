@@ -1,11 +1,14 @@
 package com.chaosbuffalo.mkwidgets.client.gui.instructions;
 
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HoveringTextInstruction implements IInstruction {
 
@@ -32,7 +35,10 @@ public class HoveringTextInstruction implements IInstruction {
     }
 
     @Override
-    public void draw(FontRenderer renderer, int screenWidth, int screenHeight, float partialTicks) {
-        GuiUtils.drawHoveringText(texts, mousePos.x, mousePos.y, screenWidth, screenHeight, -1, renderer);
+    public void draw(MatrixStack matrixStack, FontRenderer renderer, int screenWidth, int screenHeight, float partialTicks) {
+        GuiUtils.drawHoveringText(
+                matrixStack,
+                texts.stream().map(StringTextComponent::new).collect(Collectors.toList()),
+                mousePos.x, mousePos.y, screenWidth, screenHeight, -1, renderer);
     }
 }

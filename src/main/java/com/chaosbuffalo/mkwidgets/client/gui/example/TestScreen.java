@@ -7,6 +7,7 @@ import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutHorizontal;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutVertical;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.MKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.*;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -222,14 +223,14 @@ public class TestScreen extends MKScreen {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int xPos = width / 2 - PANEL_WIDTH / 2;
         int yPos = height / 2 - PANEL_HEIGHT / 2;
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         Minecraft.getInstance().getTextureManager().bindTexture(BG_LOC);
         RenderSystem.disableLighting();
-        MKAbstractGui.mkBlitUVSizeSame(xPos, yPos, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, 512, 512);
-        super.render(mouseX, mouseY, partialTicks);
+        MKAbstractGui.mkBlitUVSizeSame(matrixStack, xPos, yPos, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, 512, 512);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
         RenderSystem.enableLighting();
     }
 }

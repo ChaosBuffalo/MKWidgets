@@ -1,5 +1,6 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextComponent;
@@ -58,22 +59,22 @@ public class MKText extends MKWidget {
         return this;
     }
 
-    public void draw(Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        String formattedText = getText().getFormattedText();
+    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        String formattedText = getText().getString();
         if (isCentered()) {
-            this.drawCenteredStringNoDropShadow(this.fontRenderer, formattedText,
-                    this.getX() + this.getWidth() / 2,
-                    this.getY() + (this.getHeight() - this.fontRenderer.FONT_HEIGHT) / 2, color);
+            this.drawCenteredStringNoDropShadow(matrixStack, this.fontRenderer,
+                    formattedText,
+                    this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - this.fontRenderer.FONT_HEIGHT) / 2, color);
         } else if (isMultiline()) {
-            fontRenderer.drawSplitString(formattedText, this.getX(), this.getY(), this.getWidth(), this.color);
+            fontRenderer.func_238418_a_(getText(), this.getX(), this.getY(), this.getWidth(), this.color);
         } else {
-            fontRenderer.drawString(formattedText, this.getX(), this.getY(), this.color);
+            fontRenderer.drawString(matrixStack, formattedText, this.getX(), this.getY(), this.color);
         }
 
     }
 
-    public void drawCenteredStringNoDropShadow(FontRenderer fontRenderer, String string, int x, int y, int color) {
-        fontRenderer.drawString(string, (float)(x - fontRenderer.getStringWidth(string) / 2), (float)y, color);
+    public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, String string, int x, int y, int color) {
+        fontRenderer.drawString(matrixStack, string, (float)(x - fontRenderer.getStringWidth(string) / 2), (float)y, color);
     }
 
     public MKText setIsCentered(boolean isCentered) {
@@ -119,7 +120,7 @@ public class MKText extends MKWidget {
 
     private void updateLabel() {
         if (isMultiline()) {
-            setHeight(fontRenderer.getWordWrappedHeight(getText().getFormattedText(), getWidth()));
+            setHeight(fontRenderer.getWordWrappedHeight(getText().getString(), getWidth()));
         } else {
             setHeight(fontRenderer.FONT_HEIGHT);
         }
