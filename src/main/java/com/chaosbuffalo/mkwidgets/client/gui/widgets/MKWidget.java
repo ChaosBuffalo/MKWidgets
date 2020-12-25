@@ -6,6 +6,7 @@ import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.UIConstants;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextComponent;
 
 
 import javax.annotation.Nullable;
@@ -29,7 +30,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     private boolean visible;
     private int debugColor;
     private boolean drawDebug;
-    private String tooltip;
+    private ITextComponent tooltip;
 
     public MKWidget(int x, int y, int width, int height){
         id = UUID.randomUUID();
@@ -229,7 +230,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     }
 
     @Override
-    public IMKWidget setTooltip(String newTooltip) {
+    public IMKWidget setTooltip(ITextComponent newTooltip) {
         tooltip = newTooltip;
         return this;
     }

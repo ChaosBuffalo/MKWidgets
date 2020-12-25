@@ -9,7 +9,7 @@ import net.minecraft.util.text.StringTextComponent;
 public class MKText extends MKWidget {
 
     public ITextComponent text;
-    private FontRenderer fontRenderer;
+    private final FontRenderer fontRenderer;
     public int color;
     public boolean isMultiline;
     public boolean isCentered;
@@ -60,21 +60,36 @@ public class MKText extends MKWidget {
     }
 
     public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        String formattedText = getText().getString();
+        ITextComponent formattedText = getText();
         if (isCentered()) {
             this.drawCenteredStringNoDropShadow(matrixStack, this.fontRenderer,
                     formattedText,
                     this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - this.fontRenderer.FONT_HEIGHT) / 2, color);
         } else if (isMultiline()) {
-            fontRenderer.func_238418_a_(getText(), this.getX(), this.getY(), this.getWidth(), this.color);
+            drawStringMultiline(fontRenderer, formattedText, getX(), getY(), getWidth(), color);
         } else {
-            fontRenderer.drawString(matrixStack, formattedText, this.getX(), this.getY(), this.color);
+            drawString(fontRenderer, matrixStack, formattedText, getX(), getY(), color);
         }
+    }
 
+    protected void drawString(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
+        font.func_243248_b(matrixStack, text, x, y, color);
+    }
+
+    protected void drawStringShadow(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
+        font.func_243246_a(matrixStack, text, x, y, color);
+    }
+
+    protected void drawStringMultiline(FontRenderer font, ITextComponent text, int x, int y, int width, int color) {
+        font.func_238418_a_(text, x, y, width, color);
     }
 
     public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, String string, int x, int y, int color) {
         fontRenderer.drawString(matrixStack, string, (float)(x - fontRenderer.getStringWidth(string) / 2), (float)y, color);
+    }
+
+    public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, ITextComponent string, int x, int y, int color) {
+        drawString(fontRenderer, matrixStack, string, (float)(x - fontRenderer.getStringPropertyWidth(string) / 2), (float)y, color);
     }
 
     public MKText setIsCentered(boolean isCentered) {

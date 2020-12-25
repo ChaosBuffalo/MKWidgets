@@ -5,6 +5,8 @@ import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -151,7 +153,11 @@ public interface IMKWidget {
         }
     }
 
-    IMKWidget setTooltip(String newTooltip);
+    default IMKWidget setTooltip(String newTooltip) {
+        return setTooltip(new StringTextComponent(newTooltip));
+    }
+
+    IMKWidget setTooltip(ITextComponent text);
 
     void clearTooltip();
 

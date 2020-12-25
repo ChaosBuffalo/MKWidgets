@@ -9,12 +9,14 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.util.function.BiFunction;
 
 public class MKButton extends MKWidget {
     protected static final ResourceLocation BUTTON_TEXTURES = new ResourceLocation("textures/gui/widgets.png");
-    public String buttonText;
+    public ITextComponent buttonText;
     public BiFunction<MKButton, Integer, Boolean> pressedCallback;
     public static final int DEFAULT_HEIGHT = 20;
     public static final int DEFAULT_WIDTH = 200;
@@ -23,7 +25,15 @@ public class MKButton extends MKWidget {
         this(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
     }
 
+    public MKButton(int x, int y, ITextComponent buttonText) {
+        this(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
+    }
+
     public MKButton(String buttonText, int width, int height) {
+        this(0, 0, width, height, buttonText);
+    }
+
+    public MKButton(ITextComponent buttonText, int width, int height) {
         this(0, 0, width, height, buttonText);
     }
 
@@ -31,7 +41,15 @@ public class MKButton extends MKWidget {
         this(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
     }
 
+    public MKButton(ITextComponent buttonText) {
+        this(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
+    }
+
     public MKButton(String buttonText, int height) {
+        this(0, 0, DEFAULT_WIDTH, height, buttonText);
+    }
+
+    public MKButton(ITextComponent buttonText, int height) {
         this(0, 0, DEFAULT_WIDTH, height, buttonText);
     }
 
@@ -39,7 +57,15 @@ public class MKButton extends MKWidget {
         this(0, 0, width, DEFAULT_HEIGHT, buttonText);
     }
 
+    public MKButton(int width, ITextComponent buttonText) {
+        this(0, 0, width, DEFAULT_HEIGHT, buttonText);
+    }
+
     public MKButton(int x, int y, int width, int height, String buttonText) {
+        this(x, y, width, height, new StringTextComponent(buttonText));
+    }
+
+    public MKButton(int x, int y, int width, int height, ITextComponent buttonText) {
         super(x, y, width, height);
         this.buttonText = buttonText;
     }
