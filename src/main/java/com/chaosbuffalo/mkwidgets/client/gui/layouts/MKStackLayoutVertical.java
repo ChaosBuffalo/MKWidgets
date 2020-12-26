@@ -3,10 +3,10 @@ package com.chaosbuffalo.mkwidgets.client.gui.layouts;
 
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.LayoutRelativeWidthConstraint;
 import com.chaosbuffalo.mkwidgets.client.gui.constraints.MarginConstraint;
-import com.chaosbuffalo.mkwidgets.client.gui.constraints.VerticalStackConstraint;
+import com.chaosbuffalo.mkwidgets.client.gui.constraints.StackConstraint;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
 
-public class MKStackLayoutVertical extends MKLayout{
+public class MKStackLayoutVertical extends MKLayout {
 
     private int currentHeight;
     private boolean doSetWidth;
@@ -35,7 +35,7 @@ public class MKStackLayoutVertical extends MKLayout{
     @Override
     public void postLayoutWidget(IMKWidget widget, int index) {
         super.postLayoutWidget(widget, index);
-        if (index > 0){
+        if (index > 0) {
             currentHeight += getPaddingBot() + getPaddingTop();
         }
         currentHeight += widget.getHeight();
@@ -49,13 +49,11 @@ public class MKStackLayoutVertical extends MKLayout{
     @Override
     public boolean addWidget(IMKWidget widget) {
         super.addWidget(widget);
-        addConstraintToWidget(new MarginConstraint(MarginConstraint.MarginType.LEFT), widget);
-        addConstraintToWidget(new VerticalStackConstraint(), widget);
-        if (shouldSetChildWidth()){
+        addConstraintToWidget(MarginConstraint.LEFT, widget);
+        addConstraintToWidget(StackConstraint.VERTICAL, widget);
+        if (shouldSetChildWidth()) {
             addConstraintToWidget(new LayoutRelativeWidthConstraint(1.0f), widget);
         }
         return true;
     }
-
-
 }
