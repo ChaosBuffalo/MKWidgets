@@ -26,12 +26,12 @@ public class TestScreen extends MKScreen {
         super(title);
     }
 
-    public MKLayout getIntro(int xPos, int yPos){
+    public MKLayout getIntro(int xPos, int yPos) {
         MKLayout root = new MKLayout(xPos, yPos, PANEL_WIDTH, PANEL_HEIGHT);
         root.setMargins(5, 5, 5, 5);
         root.setPaddingTop(5).setPaddingBot(5);
         MKText introText = new MKText(font, "Welcome to the MK Widgets toolkit demo.");
-        introText.setIsCentered(true).setMultiline(true).setWidth(PANEL_WIDTH/2);
+        introText.setIsCentered(true).setMultiline(true).setWidth(PANEL_WIDTH / 2);
         root.addWidget(introText);
         root.addConstraintToWidget(new LayoutRelativeYPosConstraint(.3f), introText);
         root.addConstraintToWidget(new CenterXConstraint(), introText);
@@ -70,7 +70,7 @@ public class TestScreen extends MKScreen {
         return root;
     }
 
-    private MKLayout getToolTipTest(int xPos, int yPos){
+    private MKLayout getToolTipTest(int xPos, int yPos) {
         MKText textWithLongHover = new MKText(font, "This text will have tooltip.");
         textWithLongHover.setTooltip("This is a tooltip.");
         MKLayout root = getRootWithTitle(xPos, yPos, "Tooltip Test");
@@ -82,7 +82,7 @@ public class TestScreen extends MKScreen {
 
     }
 
-    private MKLayout getPopupTest(int xPos, int yPos){
+    private MKLayout getPopupTest(int xPos, int yPos) {
         MKLayout root = getRootWithTitle(xPos, yPos, "Popup Test");
         MKButton openPopup = new MKButton("Open Popup");
         root.addWidget(openPopup);
@@ -95,7 +95,7 @@ public class TestScreen extends MKScreen {
         popupContents.addWidget(closePopup);
         popupContents.addConstraintToWidget(new CenterXConstraint(), closePopup);
         popupContents.addConstraintToWidget(new LayoutRelativeYPosConstraint(.5f), closePopup);
-        closePopup.setPressedCallback((button, mouseButton) ->{
+        closePopup.setPressedCallback((button, mouseButton) -> {
             this.closeModal(testPopup);
             return true;
         });
@@ -108,8 +108,8 @@ public class TestScreen extends MKScreen {
     }
 
     private MKLayout getImageBox(int xPos, int yPos, int width, int height, ResourceLocation imageLoc,
-                                 MarginConstraint.MarginType verticalMargin,
-                                 MarginConstraint.MarginType horizontalMargin){
+                                 MarginConstraint verticalMargin,
+                                 MarginConstraint horizontalMargin) {
 
         MKLayout root = new MKLayout(xPos, yPos, width, height);
         // we pass in the original image size here
@@ -117,50 +117,48 @@ public class TestScreen extends MKScreen {
         root.addWidget(image);
         root.addConstraintToWidget(new LayoutRelativeWidthConstraint(.5f), image);
         root.addConstraintToWidget(new LayoutRelativeHeightConstraint(.5f), image);
-        root.addConstraintToWidget(new MarginConstraint(verticalMargin), image);
-        root.addConstraintToWidget(new MarginConstraint(horizontalMargin), image);
+        root.addConstraintToWidget(verticalMargin, image);
+        root.addConstraintToWidget(horizontalMargin, image);
         root.setDrawDebug(true);
         root.setDebugColor(0xff00ffff);
         return root;
     }
 
     private MKLayout get2ImageBoxRow(int height, ResourceLocation image1, ResourceLocation image2,
-                                     MarginConstraint.MarginType verticalMargin){
+                                     MarginConstraint verticalMargin) {
         MKStackLayoutHorizontal row = new MKStackLayoutHorizontal(0, 0, height);
         row.setPaddings(5, 5, 5, 5);
-        MKLayout img1 = getImageBox(0, 0, height, height, image1, verticalMargin,
-                MarginConstraint.MarginType.LEFT);
-        MKLayout img2 = getImageBox(0, 0, height, height, image2, verticalMargin,
-                MarginConstraint.MarginType.RIGHT);
+        MKLayout img1 = getImageBox(0, 0, height, height, image1, verticalMargin, MarginConstraint.LEFT);
+        MKLayout img2 = getImageBox(0, 0, height, height, image2, verticalMargin, MarginConstraint.RIGHT);
         row.addWidget(img1);
         row.addWidget(img2);
         return row;
     }
 
-    private MKLayout getImageBoxLayout(int rowHeight, ResourceLocation image){
+    private MKLayout getImageBoxLayout(int rowHeight, ResourceLocation image) {
         MKStackLayoutVertical layout = new MKStackLayoutVertical(0, 0, rowHeight * 2 + 30);
         layout.setMargins(10, 10, 10, 10);
         layout.setPaddings(5, 5, 5, 5);
-        MKLayout row1 = get2ImageBoxRow(rowHeight, image, image, MarginConstraint.MarginType.TOP);
-        MKLayout row2 = get2ImageBoxRow(rowHeight, image, image, MarginConstraint.MarginType.BOTTOM);
+        MKLayout row1 = get2ImageBoxRow(rowHeight, image, image, MarginConstraint.TOP);
+        MKLayout row2 = get2ImageBoxRow(rowHeight, image, image, MarginConstraint.BOTTOM);
         layout.addWidget(row1);
         layout.addWidget(row2);
         return layout;
     }
 
-    private MKLayout getRootWithTitle(int xPos, int yPos, String title){
+    private MKLayout getRootWithTitle(int xPos, int yPos, String title) {
         MKLayout root = new MKLayout(xPos, yPos, PANEL_WIDTH, PANEL_HEIGHT);
         root.setMargins(5, 5, 5, 5);
         root.setPaddingBot(10);
         root.setPaddingTop(10);
         MKText titleText = new MKText(font, title);
         root.addWidget(titleText);
-        root.addConstraintToWidget(new MarginConstraint(MarginConstraint.MarginType.TOP), titleText);
+        root.addConstraintToWidget(MarginConstraint.TOP, titleText);
         root.addConstraintToWidget(new CenterXConstraint(), titleText);
         return root;
     }
 
-    private MKLayout imageBoxDemo(int xPos, int yPos){
+    private MKLayout imageBoxDemo(int xPos, int yPos) {
         MKLayout root = getRootWithTitle(xPos, yPos, "Image Box Demo");
         MKLayout imageBox = getImageBoxLayout(50, CB_LOGO);
         imageBox.manualRecompute();
@@ -171,10 +169,10 @@ public class TestScreen extends MKScreen {
         return root;
     }
 
-    private void addBackButton(MKLayout layout){
+    private void addBackButton(MKLayout layout) {
         MKButton back = new MKButton("Back to Main");
         layout.addWidget(back);
-        layout.addConstraintToWidget(new MarginConstraint(MarginConstraint.MarginType.BOTTOM), back);
+        layout.addConstraintToWidget(MarginConstraint.BOTTOM, back);
         layout.addConstraintToWidget(new CenterXConstraint(), back);
         back.setPressedCallback((button, mouseButton) -> {
             popState();
@@ -183,7 +181,7 @@ public class TestScreen extends MKScreen {
     }
 
 
-    public MKLayout textListDemo(int xPos, int yPos){
+    public MKLayout textListDemo(int xPos, int yPos) {
         MKLayout root = getRootWithTitle(xPos, yPos, "Scrollable List Demo");
         MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, true);
         root.addWidget(scrollView);
@@ -192,7 +190,7 @@ public class TestScreen extends MKScreen {
         root.addConstraintToWidget(new CenterXConstraint(), scrollView);
         MKStackLayoutVertical verticalLayout = new MKStackLayoutVertical(0, 0, 120);
         verticalLayout.doSetChildWidth(true).setPaddingBot(5).setMarginTop(5).setMarginRight(5).setMarginLeft(5).setMarginBot(5);
-        for (int i = 0; i < 25; i++){
+        for (int i = 0; i < 25; i++) {
             String buttonText = String.format("Test Text: %d", i);
             MKText testText = new MKText(this.font, buttonText);
             testText.setTooltip(buttonText);
