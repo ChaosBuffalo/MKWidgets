@@ -10,6 +10,16 @@ public interface IMKLayout extends IMKWidget {
 
     int getMarginTop();
 
+    default boolean addWidget(IMKWidget widget, IConstraint... constraints){
+        boolean ret = addWidget(widget);
+        if (ret){
+            for (IConstraint constraint : constraints){
+                addConstraintToWidget(constraint, widget);
+            }
+        }
+        return ret;
+    }
+
     default IMKLayout setMargins(int left, int right, int top, int bottom){
         return setMarginLeft(left).setMarginRight(right).setMarginTop(top).setMarginBot(bottom);
     }
