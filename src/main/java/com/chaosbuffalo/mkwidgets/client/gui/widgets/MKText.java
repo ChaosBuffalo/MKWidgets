@@ -73,11 +73,11 @@ public class MKText extends MKWidget {
     }
 
     protected void drawString(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
-        font.func_243248_b(matrixStack, text, x, y, color);
+        font.drawText(matrixStack, text, x, y, color);
     }
 
     protected void drawStringShadow(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
-        font.func_243246_a(matrixStack, text, x, y, color);
+        font.drawText(matrixStack, text, x, y, color);
     }
 
     protected void drawStringMultiline(FontRenderer font, ITextComponent text, int x, int y, int width, int color) {
