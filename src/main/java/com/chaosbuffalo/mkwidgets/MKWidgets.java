@@ -28,9 +28,7 @@ public class MKWidgets
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static final String MODID = "mkwidgets";
-    public static final KeyBinding openTestUi = new KeyBinding("key.mkwidgets.test.desc",
-            GLFW.GLFW_KEY_APOSTROPHE,
-            "key.mkwidgets.category");
+
 
     public MKWidgets() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
@@ -38,16 +36,6 @@ public class MKWidgets
     }
 
     private void clientSetup(final FMLClientSetupEvent event){
-        ClientRegistry.registerKeyBinding(openTestUi);
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void onEvent(InputEvent.KeyInputEvent event){
-        if (openTestUi.isPressed()){
-            Minecraft.getInstance().displayGuiScreen(new TestScreen(
-                    new StringTextComponent("MK Widgets Test")));
-        }
+        ClientEventHandler.clientSetup();
     }
 }
