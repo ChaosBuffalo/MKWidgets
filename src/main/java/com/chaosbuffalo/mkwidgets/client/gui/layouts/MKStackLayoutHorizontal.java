@@ -32,7 +32,7 @@ public class MKStackLayoutHorizontal extends MKLayout {
     @Override
     public void postLayoutWidget(IMKWidget widget, int index) {
         super.postLayoutWidget(widget, index);
-        if (index > 0){
+        if (index > 0) {
             currentWidth += getPaddingLeft() + getPaddingRight();
         }
         currentWidth += widget.getWidth();
@@ -46,9 +46,9 @@ public class MKStackLayoutHorizontal extends MKLayout {
     @Override
     public boolean addWidget(IMKWidget widget) {
         super.addWidget(widget);
-        addConstraintToWidget(new MarginConstraint(MarginConstraint.MarginType.TOP), widget);
-        addConstraintToWidget(new HorizontalStackConstraint(), widget);
-        if (shouldSetChildHeight()){
+        addConstraintToWidget(MarginConstraint.TOP, widget);
+        addConstraintToWidget(StackConstraint.HORIZONTAL, widget);
+        if (shouldSetChildHeight()) {
             addConstraintToWidget(new LayoutRelativeHeightConstraint(1.0f), widget);
         }
         return true;

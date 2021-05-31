@@ -3,6 +3,7 @@ package com.chaosbuffalo.mkwidgets.utils;
 import com.chaosbuffalo.mkwidgets.MKWidgets;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKAbstractGui;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKImage;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -38,22 +39,22 @@ public class ManualAtlas {
         return regions.get(regionName);
     }
 
-    public void drawRegionAtPos(String regionName, int xPos, int yPos){
+    public void drawRegionAtPos(MatrixStack matrixStack, String regionName, int xPos, int yPos){
         TextureRegion region = regions.get(regionName);
         if (region == null){
             MKWidgets.LOGGER.info("Skip drawing region {} for manual atlas {}, region not found.", regionName, textureLoc);
             return;
         }
-        MKAbstractGui.mkBlitUVSizeSame(xPos, yPos, region.u, region.v, region.width, region.height, width, height);
+        MKAbstractGui.mkBlitUVSizeSame(matrixStack, xPos, yPos, region.u, region.v, region.width, region.height, width, height);
     }
 
-    public void drawRegionAtPosPartialWidth(String regionName, int xPos, int yPos, int partialWidth){
+    public void drawRegionAtPosPartialWidth(MatrixStack matrixStack, String regionName, int xPos, int yPos, int partialWidth){
         TextureRegion region = regions.get(regionName);
         if (region == null){
             MKWidgets.LOGGER.info("Skip drawing region {} for manual atlas {}, region not found.", regionName, textureLoc);
             return;
         }
-        MKAbstractGui.mkBlitUVSizeSame(xPos, yPos, region.u, region.v, partialWidth, region.height, width, height);
+        MKAbstractGui.mkBlitUVSizeSame(matrixStack, xPos, yPos, region.u, region.v, partialWidth, region.height, width, height);
     }
 
     @Nullable
