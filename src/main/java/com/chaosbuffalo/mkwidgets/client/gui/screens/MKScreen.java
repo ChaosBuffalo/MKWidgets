@@ -87,6 +87,7 @@ public class MKScreen extends Screen implements IMKScreen {
         modal.setWidth(width);
         modal.setHeight(height);
         this.modals.add(modal);
+        clearHovers();
     }
 
     @Override
@@ -122,6 +123,15 @@ public class MKScreen extends Screen implements IMKScreen {
     @Override
     public void clearPreDrawRunnables() {
         preDrawRunnables.clear();
+    }
+
+    public void clearHovers(){
+        for (IMKModal modal : modals){
+            modal.clearHovered();
+        }
+        for (IMKWidget child : children){
+            child.clearHovered();
+        }
     }
 
     @Override
