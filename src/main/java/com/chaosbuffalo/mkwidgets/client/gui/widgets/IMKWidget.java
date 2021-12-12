@@ -11,6 +11,7 @@ import net.minecraft.util.text.StringTextComponent;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 public interface IMKWidget {
@@ -34,6 +35,15 @@ public interface IMKWidget {
             getChildren().removeIf((x) -> x.getId().equals(widget.getId()));
             widget.setParent(null);
             widget.inheritScreen(null);
+        }
+    }
+
+    default void findFocusable(List<IMKWidget> tree){
+        if (canFocus()){
+            tree.add(this);
+        }
+        for (IMKWidget wid : getChildren()){
+            wid.findFocusable(tree);
         }
     }
 
@@ -92,6 +102,16 @@ public interface IMKWidget {
     }
 
     int getLongHoverTicks();
+
+    default boolean canFocus(){
+        return false;
+    }
+
+    default void onFocus() {
+    }
+
+    default void onFocusLost(){
+    }
 
     IMKWidget setLongHoverTicks(int ticks);
 
@@ -314,11 +334,33 @@ public interface IMKWidget {
                 return true;
             }
         }
-        return onMousePressed(minecraft, mouseX, mouseY, mouseButton);
+        boolean consumedBySelf = onMousePressed(minecraft, mouseX, mouseY, mouseButton);
+        if (consumedBySelf){
+            IMKScreen screen = getScreen();
+            if (screen != null) {
+                if (canFocus()){
+                    screen.setFocus(this);
+                } else {
+                    screen.setFocus(null);
+                }
+            }
+        }
+        return consumedBySelf;
     }
 
     default boolean onMousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         return false;
     }
 
+    default boolean keyPressed(Minecraft minecraft, int keyCode, int scanCode, int modifiers) {
+        return false;
+    }
+
+    default boolean keyReleased(Minecraft minecraft, int keyCode, int scanCode, int modifiers) {
+        return false;
+    }
+
+    default boolean charTyped(Minecraft minecraft, char codePoint, int modifiers) {
+        return false;
+    }
 }

@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.function.BiFunction;
 
@@ -67,6 +68,7 @@ public class MKButton extends MKWidget {
 
     public MKButton(int x, int y, int width, int height, ITextComponent buttonText) {
         super(x, y, width, height);
+        setCanFocus(true);
         this.buttonText = buttonText;
     }
 
@@ -90,10 +92,23 @@ public class MKButton extends MKWidget {
         int i = 1;
         if (!this.isEnabled()) {
             i = 0;
-        } else if (isHovering) {
+        } else if (isHovering || (getScreen() != null && this.equals(getScreen().getFocus()))) {
             i = 2;
         }
         return i;
+    }
+
+    @Override
+    public boolean keyPressed(Minecraft minecraft, int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_E){
+            if (pressedCallback != null) {
+                if (pressedCallback.apply(this, GLFW.GLFW_MOUSE_BUTTON_1)) {
+                    playPressSound(minecraft.getSoundHandler());
+                    return true;
+                }
+            }
+        }
+        return super.keyPressed(minecraft, keyCode, scanCode, modifiers);
     }
 
     @Override
@@ -138,4 +153,5 @@ public class MKButton extends MKWidget {
     public void playPressSound(SoundHandler soundHandler) {
         soundHandler.play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
+
 }
