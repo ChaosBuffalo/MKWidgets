@@ -181,11 +181,11 @@ public class MKScrollView extends MKWidget {
     }
 
     public void setToTop() {
-        setOffsetY(getY());
+        setOffsetY(0);
     }
 
     public void setToRight() {
-        setOffsetX(getX());
+        setOffsetX(0);
     }
 
     @Override
@@ -231,7 +231,7 @@ public class MKScrollView extends MKWidget {
             if (isContentTaller()) {
                 float ratio = (float) getHeight() / (float) child.getHeight();
                 int heightForScrollbar = Math.round(ratio * getHeight()) + 1;
-                float posRatio = (float) (getY() - getOffsetY()) / (float) child.getHeight();
+                float posRatio = (float) (-getOffsetY()) / (float) child.getHeight();
                 int pos = (int) (posRatio * getHeight());
                 int barX = getX() + getWidth() - SCROLL_BAR_WIDTH;
                 int barY = getY() + pos;
@@ -322,7 +322,7 @@ public class MKScrollView extends MKWidget {
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
             IMKWidget child = it.next();
-            if (child.mouseReleased(mouseX - offsetX, mouseY - offsetX, mouseButton)) {
+            if (child.mouseReleased(mouseX - offsetX, mouseY - offsetY, mouseButton)) {
                 return true;
             }
         }
@@ -361,37 +361,56 @@ public class MKScrollView extends MKWidget {
 
 
     public double lockScrollX(IMKWidget child, double dX) {
-        int scrollX = getX();
+        int scrollX = 0;
         int childWidth = child.getWidth();
         int scrollWidth = getWidth();
 //        Log.info("ScrollX : %d, childWidth : %d, scrollWidth : %d, cameraX: %d, dX : %d", scrollX, childWidth, scrollWidth, offsetX, dX);
-        if (childWidth < scrollWidth) {
+        if (childWidth <= scrollWidth) {
             if (offsetX + dX < scrollX) {
                 dX = scrollX - offsetX;
             } else if (offsetX + dX + childWidth > scrollX + scrollWidth) {
                 dX = scrollX + scrollWidth - offsetX - childWidth;
             }
         } else {
-            if (offsetX + dX > scrollX + getScrollMarginX()) {
-                dX = scrollX - offsetX + getScrollMarginX();
-            } else if (offsetX + dX + childWidth <= scrollX + scrollWidth - getScrollMarginX()) {
-                dX = scrollX + scrollWidth - getScrollMarginX() - offsetX - childWidth;
+//            if (offsetX + dX + childWidth < scrollX + getScrollMarginX()) {
+//                dX = scrollX + getScrollMarginX() - offsetX - childWidth;
+//            } else if (offsetX + dX > scrollX + scrollWidth - getScrollMarginX()) {
+//                dX = scrollX + scrollWidth - getScrollMarginX() - offsetX;
+//            }
+            // top of child passes top of scroll view
+            if (offsetX + dX - getScrollMarginX() > 0 && dX > 0) {
+                dX = -offsetX + getScrollMarginX();
+                // bottom of child passes bottom of scroll view
+            } else if (offsetX + dX + childWidth + getScrollMarginX() < scrollWidth && dX < 0) {
+                dX = scrollWidth - offsetX - childWidth - getScrollMarginX();
             }
         }
         return dX;
     }
 
     public double lockScrollY(IMKWidget child, double dY) {
-        int scrollY = getY();
+        int scrollY = 0;
         int childHeight = child.getHeight();
         int scrollHeight = getHeight();
-        if (childHeight < scrollHeight) {
-            return getY() - offsetY;
+        if (childHeight <= scrollHeight) {
+            if (offsetY + dY < scrollY) {
+                dY = scrollY - offsetY;
+            } else if (offsetY + dY + childHeight > scrollY + scrollHeight) {
+                dY = scrollY + scrollHeight - offsetY - childHeight;
+            }
         } else {
-            if (offsetY + dY > scrollY + getScrollMarginY()) {
-                dY = scrollY - offsetY + getScrollMarginY();
-            } else if (offsetY + dY + childHeight <= scrollY + scrollHeight - getScrollMarginY()) {
-                dY = scrollY + scrollHeight - getScrollMarginY() - offsetY - childHeight;
+            // bottom of child passes top of scroll view
+//            if (offsetY + dY + childHeight < -getScrollMarginY()) {
+//                dY = -getScrollMarginY() - offsetY - childHeight;
+//                // top of child passes bottom of scroll view
+//            } else if (offsetY + dY > scrollHeight + getScrollMarginY()) {
+//                dY = scrollHeight + getScrollMarginY() - offsetY;
+//                // top of child passes top of scroll view
+            if (offsetY + dY - getScrollMarginY() > 0 && dY > 0) {
+                dY = -offsetY + getScrollMarginY();
+                // bottom of child passes bottom of scroll view
+            } else if (offsetY + dY + childHeight + getScrollMarginY() < scrollHeight && dY < 0) {
+                dY = scrollHeight - offsetY - childHeight - getScrollMarginY();
             }
         }
         return dY;
@@ -418,6 +437,8 @@ public class MKScrollView extends MKWidget {
         if (getChildren().size() > 0) {
             return false;
         }
+        widget.setX(getX());
+        widget.setY(getY());
         return super.addWidget(widget);
     }
 }

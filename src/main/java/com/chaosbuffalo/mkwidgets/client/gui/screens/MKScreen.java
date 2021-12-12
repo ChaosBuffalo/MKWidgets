@@ -9,7 +9,9 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
+import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -24,8 +26,10 @@ public class MKScreen extends Screen implements IMKScreen {
     private final ArrayList<Runnable> preDrawRunnables;
     private final ArrayList<IInstruction> postRenderInstructions;
     private final ArrayDeque<IMKModal> modals;
+    private final ArrayDeque<Runnable> delayedTasks;
     private IDragState dragState;
     private IMKWidget dragSource;
+    private IMKWidget focus;
 
     public MKScreen(ITextComponent title) {
         super(title);
@@ -38,6 +42,8 @@ public class MKScreen extends Screen implements IMKScreen {
         stateCache = new HashMap<>();
         postRenderInstructions = new ArrayList<>();
         modals = new ArrayDeque<>();
+        delayedTasks = new ArrayDeque<>();
+        focus = null;
     }
 
     @Override
@@ -88,6 +94,7 @@ public class MKScreen extends Screen implements IMKScreen {
         modal.setHeight(height);
         this.modals.add(modal);
         clearHovers();
+        setFocus(null);
     }
 
     @Override
@@ -97,7 +104,13 @@ public class MKScreen extends Screen implements IMKScreen {
                 modal.getOnCloseCallback().run();
             }
             modal.inheritScreen(null);
+            setFocus(null);
         }
+    }
+
+    @Override
+    public IMKWidget getFocus() {
+        return focus;
     }
 
     @Override
@@ -230,6 +243,17 @@ public class MKScreen extends Screen implements IMKScreen {
         return stateStack.peek();
     }
 
+    @Override
+    public void setFocus(@Nullable IMKWidget widget) {
+        if (focus != null){
+            focus.onFocusLost();
+        }
+        if (widget != null){
+            widget.onFocus();
+        }
+        focus = widget;
+    }
+
     private void runSetup() {
         setupScreen();
         for (Runnable cb : postSetupCallbacks) {
@@ -272,6 +296,59 @@ public class MKScreen extends Screen implements IMKScreen {
             }
         }
         return false;
+    }
+
+    public boolean onKeyPress(int keyCode, int scanCode, int modifiers){
+
+        if (keyCode == GLFW.GLFW_KEY_TAB){
+            List<IMKWidget> widgets = findFocusable();
+            if (widgets.isEmpty()){
+                return false;
+            }
+            int total = widgets.size();
+            if (focus == null){
+                setFocus(widgets.get(0));
+            } else {
+                int i = widgets.indexOf(focus);
+                int next;
+                if (hasShiftDown()){
+                    next = i - 1;
+                    if (next < 0){
+                        next = total - 1;
+                    }
+                } else {
+                    next = i + 1;
+                    if (next >= total){
+                        next = 0;
+                    }
+                }
+                setFocus(widgets.get(next));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public List<IMKWidget> findFocusable(){
+        List<IMKWidget> focusable = new ArrayList<>();
+        for (IMKWidget child : children){
+            child.findFocusable(focusable);
+        }
+        return focusable;
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (focus != null){
+            boolean focusHandled = focus.keyPressed(this.minecraft, keyCode, scanCode, modifiers);
+            if (!focusHandled && !onKeyPress(keyCode, scanCode, modifiers)){
+                return super.keyPressed(keyCode, scanCode, modifiers);
+            } else {
+                return true;
+            }
+        } else {
+            return onKeyPress(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
+        }
     }
 
     @Override
@@ -363,6 +440,7 @@ public class MKScreen extends Screen implements IMKScreen {
                 return true;
             }
         }
+        setFocus(null);
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -413,5 +491,35 @@ public class MKScreen extends Screen implements IMKScreen {
             }
         }
         return super.mouseReleased(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        if (focus != null){
+            return focus.keyReleased(this.minecraft, keyCode, scanCode, modifiers);
+        } else {
+            return super.keyReleased(keyCode, scanCode, modifiers);
+        }
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (focus != null){
+            return focus.charTyped(this.minecraft, codePoint, modifiers);
+        } else {
+            return super.charTyped(codePoint, modifiers);
+        }
+    }
+
+    public void scheduleNextTick(Runnable runnable){
+        delayedTasks.add(runnable);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        while (!delayedTasks.isEmpty()){
+            delayedTasks.pop().run();
+        }
     }
 }

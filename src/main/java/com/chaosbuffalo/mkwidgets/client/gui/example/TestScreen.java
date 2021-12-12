@@ -10,8 +10,10 @@ import com.chaosbuffalo.mkwidgets.client.gui.widgets.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class TestScreen extends MKScreen {
     private final int PANEL_WIDTH = 320;
@@ -92,9 +94,22 @@ public class TestScreen extends MKScreen {
         MKLayout popupContents = new MKLayout(xPos, yPos, PANEL_WIDTH, PANEL_HEIGHT);
         testPopup.addWidget(popupContents);
         MKButton closePopup = new MKButton("Close Popup");
+        MKText reflectText = new MKText(font, "", 200).setIsCentered(true);
+        MKTextFieldWidget textInput = new MKTextFieldWidget(font, xPos, yPos, 200, 20,
+                new StringTextComponent("test input"));
+
+        textInput.setTextChangeCallback((wid, text) -> {
+            reflectText.setText(text);
+        });
+        popupContents.addWidget(textInput);
+        popupContents.addConstraintToWidget(new CenterXConstraint(), textInput);
+        popupContents.addConstraintToWidget(new LayoutRelativeYPosConstraint(.25f), textInput);
+        popupContents.addWidget(reflectText);
+        popupContents.addConstraintToWidget(new CenterXConstraint(), reflectText);
+        popupContents.addConstraintToWidget(new LayoutRelativeYPosConstraint(.5f), reflectText);
         popupContents.addWidget(closePopup);
         popupContents.addConstraintToWidget(new CenterXConstraint(), closePopup);
-        popupContents.addConstraintToWidget(new LayoutRelativeYPosConstraint(.5f), closePopup);
+        popupContents.addConstraintToWidget(new LayoutRelativeYPosConstraint(.75f), closePopup);
         closePopup.setPressedCallback((button, mouseButton) -> {
             this.closeModal(testPopup);
             return true;

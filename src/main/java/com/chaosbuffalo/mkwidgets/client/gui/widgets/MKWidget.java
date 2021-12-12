@@ -30,6 +30,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     private boolean visible;
     private int debugColor;
     private boolean drawDebug;
+    private boolean canFocus;
     private ITextComponent tooltip;
 
     public MKWidget(int x, int y, int width, int height){
@@ -49,6 +50,16 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
         screen = null;
         tooltip = null;
         debugColor = 0x3fffffff;
+        canFocus = false;
+    }
+
+    @Override
+    public boolean canFocus() {
+        return canFocus;
+    }
+
+    public void setCanFocus(boolean canFocus) {
+        this.canFocus = canFocus;
     }
 
     @Override

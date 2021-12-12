@@ -5,7 +5,9 @@ import com.chaosbuffalo.mkwidgets.client.gui.actions.IDragState;
 import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
+import net.minecraft.client.gui.IGuiEventListener;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -14,6 +16,8 @@ public interface IMKScreen {
     void addModal(IMKModal modal);
 
     void closeModal(IMKModal modal);
+
+    IMKWidget getFocus();
 
     void addPostRenderInstruction(IInstruction instruction);
 
@@ -44,6 +48,8 @@ public interface IMKScreen {
     String popState();
 
     String getState();
+
+    void setFocus(@Nullable IMKWidget widget);
 
     void addWidget(IMKWidget widget);
 
