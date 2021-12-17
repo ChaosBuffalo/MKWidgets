@@ -14,7 +14,7 @@ public class MKImage extends MKWidget {
     private int texHeight;
     private int sourceWidth;
     private int sourceHeight;
-    private IntColor color;
+    protected IntColor color;
 
     public MKImage(int x, int y, int width, int height, ResourceLocation imageLoc) {
         this(x, y, width, height, width, height, 0, 0, width, height, imageLoc);

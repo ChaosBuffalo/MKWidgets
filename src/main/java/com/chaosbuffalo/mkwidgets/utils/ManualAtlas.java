@@ -3,6 +3,7 @@ package com.chaosbuffalo.mkwidgets.utils;
 import com.chaosbuffalo.mkwidgets.MKWidgets;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKAbstractGui;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKImage;
+import com.chaosbuffalo.mkwidgets.client.gui.widgets.MKPercentageImage;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -65,6 +66,17 @@ public class ManualAtlas {
             return null;
         }
         return new MKImage(xPos, yPos, width, height, this.width, this.height, region.u, region.v, region.width,
+                region.height, textureLoc);
+    }
+
+    @Nullable
+    public MKPercentageImage getPercentageImageForRegion(String regionName, int xPos, int yPos, int width, int height){
+        TextureRegion region = regions.get(regionName);
+        if (region == null){
+            MKWidgets.LOGGER.info("Can't get MKPercentageImage for region: {} in manual atlas {}, region not found.", regionName, textureLoc);
+            return null;
+        }
+        return new MKPercentageImage(xPos, yPos, width, height, this.width ,this.height, region.u, region.v, region.width,
                 region.height, textureLoc);
     }
 
