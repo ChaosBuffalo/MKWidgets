@@ -367,6 +367,9 @@ public class MKScreen extends Screen implements IMKScreen {
             for (IMKModal modal : modals){
                 modal.mouseHover(this.minecraft, mouseX, mouseY, partialTicks);
             }
+            for (IMKWidget child : children){
+                child.clearHovered();
+            }
         } else {
             for (IMKWidget child : children){
                 child.mouseHover(this.minecraft, mouseX, mouseY, partialTicks);

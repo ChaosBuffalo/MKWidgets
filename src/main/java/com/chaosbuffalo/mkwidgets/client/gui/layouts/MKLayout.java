@@ -150,7 +150,6 @@ public class MKLayout extends MKWidget implements IMKLayout {
             recomputeChildren();
             needsRecompute = false;
         }
-        handleHoverDetection(mouseX, mouseY, partialTicks);
         int x = getX();
         int y = getY();
         int width = getWidth();
