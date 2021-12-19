@@ -268,8 +268,11 @@ public interface IMKWidget {
     }
 
     default boolean mouseScrollWheel(Minecraft minecraft, double mouseX, double mouseY, double distance) {
-        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+        if (!this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return false;
+        }
+        if (!this.isEnabled()){
+            return true;
         }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
@@ -287,8 +290,11 @@ public interface IMKWidget {
 
     default boolean mouseDragged(Minecraft minecraft, double mouseX, double mouseY, int mouseButton,
                                  double dX, double dY) {
-        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+        if (!this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return false;
+        }
+        if (!this.isEnabled()){
+            return true;
         }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
@@ -306,8 +312,11 @@ public interface IMKWidget {
     }
 
     default boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+        if (!this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return false;
+        }
+        if (!this.isEnabled()){
+            return true;
         }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
@@ -324,8 +333,11 @@ public interface IMKWidget {
     }
 
     default boolean mousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
-        if (!this.isEnabled() || !this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
+        if (!this.isVisible() || !this.isInBounds(mouseX, mouseY)) {
             return false;
+        }
+        if (!this.isEnabled()){
+            return true;
         }
         Iterator<IMKWidget> it = getChildren().descendingIterator();
         while (it.hasNext()) {
