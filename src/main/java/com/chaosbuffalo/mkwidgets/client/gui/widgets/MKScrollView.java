@@ -3,6 +3,7 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
@@ -49,7 +50,7 @@ public class MKScrollView extends MKWidget {
     }
 
 
-    public MKScrollView setScrollVelocity(double vel){
+    public MKScrollView setScrollVelocity(double vel) {
         scrollVelocity = vel;
         return this;
     }
@@ -100,12 +101,12 @@ public class MKScrollView extends MKWidget {
         return this;
     }
 
-    public int getIntOffsetX(){
-        return (int)Math.round(offsetX);
+    private int getIntOffsetX() {
+        return (int) Math.round(offsetX);
     }
 
-    public int getIntOffsetY(){
-        return (int)Math.round(offsetY);
+    private int getIntOffsetY() {
+        return (int) Math.round(offsetY);
     }
 
     public MKScrollView setDoScrollX(boolean value) {
@@ -188,15 +189,19 @@ public class MKScrollView extends MKWidget {
         setOffsetX(0);
     }
 
+    public void resetView() {
+        setToTop();
+        setToRight();
+    }
+
     @Override
     public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         GL11.glPushMatrix();
         GL11.glTranslatef(getIntOffsetX(), getIntOffsetY(), 0);
 
         if (isClipBoundsEnabled()) {
-            GL11.glEnable(GL11.GL_SCISSOR_TEST);
             int y1 = screenHeight - y - height - 1;
-            GL11.glScissor((int) Math.round(x * scaleFactor), (int) Math.round(y1 * scaleFactor),
+            RenderSystem.enableScissor((int) Math.round(x * scaleFactor), (int) Math.round(y1 * scaleFactor),
                     (int) Math.round(width * scaleFactor), (int) Math.round((height + 1) * scaleFactor));
         }
     }
@@ -220,7 +225,7 @@ public class MKScrollView extends MKWidget {
     @Override
     public void postDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         if (isClipBoundsEnabled()) {
-            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            RenderSystem.disableScissor();
         }
         GL11.glPopMatrix();
         if (shouldDrawScrollbars()) {
@@ -262,7 +267,7 @@ public class MKScrollView extends MKWidget {
 
     @Override
     public void mouseHover(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (!checkHovered(mouseX, mouseY)){
+        if (!checkHovered(mouseX, mouseY)) {
             clearHovered();
             return;
         }
@@ -357,7 +362,6 @@ public class MKScrollView extends MKWidget {
         }
         return false;
     }
-
 
 
     public double lockScrollX(IMKWidget child, double dX) {
