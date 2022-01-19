@@ -84,7 +84,8 @@ public class MKScrollView extends MKWidget {
                 dY = lockScrollY(child, dY);
             }
         }
-        offsetY += dY;
+        if (isContentTaller())
+            offsetY += dY;
         return true;
     }
 
@@ -352,10 +353,10 @@ public class MKScrollView extends MKWidget {
                 dX = lockScrollX(child, dX);
                 dY = lockScrollY(child, dY);
             }
-            if (doScrollX) {
+            if (doScrollX && isContentWider()) {
                 offsetX += dX;
             }
-            if (doScrollY) {
+            if (doScrollY && isContentTaller()) {
                 offsetY += dY;
             }
             return true;
