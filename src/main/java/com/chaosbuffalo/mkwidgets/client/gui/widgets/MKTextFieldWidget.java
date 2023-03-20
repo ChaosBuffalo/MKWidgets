@@ -1,9 +1,9 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.BiConsumer;
@@ -14,9 +14,9 @@ public class MKTextFieldWidget extends MCWidgetContainer{
     private Predicate<String> validator;
     private BiConsumer<MKTextFieldWidget, String> onSubmit;
 
-    public MKTextFieldWidget(FontRenderer font, int x, int y, int width, int height, ITextComponent title) {
-        super(x, y, width, height, new TextFieldWidget(font, x, y, width, height, title), true);
-        TextFieldWidget wid = getContainedWidget();
+    public MKTextFieldWidget(Font font, int x, int y, int width, int height, Component title) {
+        super(x, y, width, height, new EditBox(font, x, y, width, height, title), true);
+        EditBox wid = getContainedWidget();
         wid.setResponder(this::onTextChange);
         wid.setFilter(this::validateText);
     }
@@ -65,8 +65,8 @@ public class MKTextFieldWidget extends MCWidgetContainer{
     }
 
     @Override
-    public TextFieldWidget getContainedWidget() {
-        return (TextFieldWidget) super.getContainedWidget();
+    public EditBox getContainedWidget() {
+        return (EditBox) super.getContainedWidget();
     }
 
     @Override

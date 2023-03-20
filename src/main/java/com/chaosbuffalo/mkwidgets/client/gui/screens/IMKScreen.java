@@ -5,7 +5,6 @@ import com.chaosbuffalo.mkwidgets.client.gui.actions.IDragState;
 import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import net.minecraft.client.gui.IGuiEventListener;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

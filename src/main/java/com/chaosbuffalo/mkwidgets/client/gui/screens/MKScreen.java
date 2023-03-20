@@ -5,10 +5,10 @@ import com.chaosbuffalo.mkwidgets.client.gui.actions.IDragState;
 import com.chaosbuffalo.mkwidgets.client.gui.instructions.IInstruction;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKModal;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.IMKWidget;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -31,7 +31,7 @@ public class MKScreen extends Screen implements IMKScreen {
     private IMKWidget dragSource;
     private IMKWidget focus;
 
-    public MKScreen(ITextComponent title) {
+    public MKScreen(Component title) {
         super(title);
         firstRender = true;
         children = new ArrayDeque<>();
@@ -352,7 +352,7 @@ public class MKScreen extends Screen implements IMKScreen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (firstRender) {
             if (!getState().equals(NO_STATE)){
                 addRestoreStateCallbacks();
@@ -389,7 +389,7 @@ public class MKScreen extends Screen implements IMKScreen {
             dragState.updateDragState(minecraft, mouseX, mouseY, this);
         }
         for (IInstruction instruction : postRenderInstructions) {
-            instruction.draw(matrixStack, getMinecraft().font, this.width, this.height, partialTicks);
+            instruction.draw(matrixStack, getMinecraft().font, this.width, this.height, partialTicks, this);
         }
         postRenderInstructions.clear();
     }

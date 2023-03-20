@@ -1,23 +1,26 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.client.gui.Font;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.BiFunction;
 
 public class MKButton extends MKWidget {
     protected static final ResourceLocation BUTTON_TEXTURES = new ResourceLocation("textures/gui/widgets.png");
-    public ITextComponent buttonText;
+    public Component buttonText;
     public BiFunction<MKButton, Integer, Boolean> pressedCallback;
     public static final int DEFAULT_HEIGHT = 20;
     public static final int DEFAULT_WIDTH = 200;
@@ -26,7 +29,7 @@ public class MKButton extends MKWidget {
         this(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
     }
 
-    public MKButton(int x, int y, ITextComponent buttonText) {
+    public MKButton(int x, int y, Component buttonText) {
         this(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
     }
 
@@ -34,7 +37,7 @@ public class MKButton extends MKWidget {
         this(0, 0, width, height, buttonText);
     }
 
-    public MKButton(ITextComponent buttonText, int width, int height) {
+    public MKButton(Component buttonText, int width, int height) {
         this(0, 0, width, height, buttonText);
     }
 
@@ -42,7 +45,7 @@ public class MKButton extends MKWidget {
         this(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
     }
 
-    public MKButton(ITextComponent buttonText) {
+    public MKButton(Component buttonText) {
         this(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, buttonText);
     }
 
@@ -50,7 +53,7 @@ public class MKButton extends MKWidget {
         this(0, 0, DEFAULT_WIDTH, height, buttonText);
     }
 
-    public MKButton(ITextComponent buttonText, int height) {
+    public MKButton(Component buttonText, int height) {
         this(0, 0, DEFAULT_WIDTH, height, buttonText);
     }
 
@@ -58,15 +61,15 @@ public class MKButton extends MKWidget {
         this(0, 0, width, DEFAULT_HEIGHT, buttonText);
     }
 
-    public MKButton(int width, ITextComponent buttonText) {
+    public MKButton(int width, Component buttonText) {
         this(0, 0, width, DEFAULT_HEIGHT, buttonText);
     }
 
     public MKButton(int x, int y, int width, int height, String buttonText) {
-        this(x, y, width, height, new StringTextComponent(buttonText));
+        this(x, y, width, height, new TextComponent(buttonText));
     }
 
-    public MKButton(int x, int y, int width, int height, ITextComponent buttonText) {
+    public MKButton(int x, int y, int width, int height, Component buttonText) {
         super(x, y, width, height);
         setCanFocus(true);
         this.buttonText = buttonText;
@@ -112,10 +115,11 @@ public class MKButton extends MKWidget {
     }
 
     @Override
-    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        FontRenderer fontrenderer = mc.font;
-        mc.getTextureManager().bind(BUTTON_TEXTURES);
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+    public void draw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        Font fontrenderer = mc.font;
+        RenderSystem.setShaderTexture(0, BUTTON_TEXTURES);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int i = getHoverState(isHovered());
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(
@@ -150,8 +154,8 @@ public class MKButton extends MKWidget {
                 this.getY() + (this.getHeight() - 8) / 2, j);
     }
 
-    public void playPressSound(SoundHandler soundHandler) {
-        soundHandler.play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    public void playPressSound(SoundManager soundHandler) {
+        soundHandler.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
 }

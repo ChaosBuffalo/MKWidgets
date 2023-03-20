@@ -1,20 +1,20 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class MKText extends MKWidget {
 
-    public ITextComponent text;
-    private final FontRenderer fontRenderer;
+    public Component text;
+    private final Font fontRenderer;
     public int color;
     public boolean isMultiline;
     public boolean isCentered;
 
-    public MKText(FontRenderer renderer, ITextComponent text, int x, int y, int width, int height){
+    public MKText(Font renderer, Component text, int x, int y, int width, int height){
         super(x, y, width, height);
         this.color = 0;
         this.fontRenderer = renderer;
@@ -22,27 +22,27 @@ public class MKText extends MKWidget {
         this.isMultiline = false;
     }
 
-    public MKText(FontRenderer renderer, ITextComponent text){
+    public MKText(Font renderer, Component text){
         this(renderer, text, 200, renderer.lineHeight);
     }
 
-    public MKText(FontRenderer renderer, ITextComponent text, int x, int y){
+    public MKText(Font renderer, Component text, int x, int y){
         this(renderer, text, x, y, 200, renderer.lineHeight);
     }
 
-    public MKText(FontRenderer renderer, String text) {
+    public MKText(Font renderer, String text) {
         this(renderer, text, 200);
     }
 
-    public MKText(FontRenderer renderer, String text, int x, int y){
+    public MKText(Font renderer, String text, int x, int y){
         this(renderer, text, x, y, 200, renderer.lineHeight);
     }
 
-    public MKText(FontRenderer renderer, String text, int x, int y, int width, int height){
-        this(renderer, new StringTextComponent(text), x, y, width, height);
+    public MKText(Font renderer, String text, int x, int y, int width, int height){
+        this(renderer, new TextComponent(text), x, y, width, height);
     }
 
-    public MKText(FontRenderer renderer, String text, int width){
+    public MKText(Font renderer, String text, int width){
         this(renderer, text, 0, 0, width, renderer.lineHeight);
     }
 
@@ -59,8 +59,8 @@ public class MKText extends MKWidget {
         return this;
     }
 
-    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        ITextComponent formattedText = getText();
+    public void draw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        Component formattedText = getText();
         if (isCentered()) {
             this.drawCenteredStringNoDropShadow(matrixStack, this.fontRenderer,
                     formattedText,
@@ -72,23 +72,23 @@ public class MKText extends MKWidget {
         }
     }
 
-    protected void drawString(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
+    protected void drawString(Font font, PoseStack matrixStack, Component text, float x, float y, int color) {
         font.draw(matrixStack, text, x, y, color);
     }
 
-    protected void drawStringShadow(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
+    protected void drawStringShadow(Font font, PoseStack matrixStack, Component text, float x, float y, int color) {
         font.draw(matrixStack, text, x, y, color);
     }
 
-    protected void drawStringMultiline(FontRenderer font, ITextComponent text, int x, int y, int width, int color) {
+    protected void drawStringMultiline(Font font, Component text, int x, int y, int width, int color) {
         font.drawWordWrap(text, x, y, width, color);
     }
 
-    public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, String string, int x, int y, int color) {
+    public void drawCenteredStringNoDropShadow(PoseStack matrixStack, Font fontRenderer, String string, int x, int y, int color) {
         fontRenderer.draw(matrixStack, string, (float)(x - fontRenderer.width(string) / 2), (float)y, color);
     }
 
-    public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, ITextComponent string, int x, int y, int color) {
+    public void drawCenteredStringNoDropShadow(PoseStack matrixStack, Font fontRenderer, Component string, int x, int y, int color) {
         drawString(fontRenderer, matrixStack, string, (float)(x - fontRenderer.width(string) / 2), (float)y, color);
     }
 
@@ -102,16 +102,16 @@ public class MKText extends MKWidget {
     }
 
     public MKText setText(String text) {
-        return setText(new StringTextComponent(text));
+        return setText(new TextComponent(text));
     }
 
-    public MKText setText(ITextComponent text){
+    public MKText setText(Component text){
         this.text = text;
         updateLabel();
         return this;
     }
 
-    public ITextComponent getText() {
+    public Component getText() {
         return text;
     }
 

@@ -4,9 +4,9 @@ import com.chaosbuffalo.mkwidgets.client.gui.instructions.HoveringTextInstructio
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.UIConstants;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 
 import javax.annotation.Nullable;
@@ -31,7 +31,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     private int debugColor;
     private boolean drawDebug;
     private boolean canFocus;
-    private ITextComponent tooltip;
+    private Component tooltip;
 
     public MKWidget(int x, int y, int width, int height){
         id = UUID.randomUUID();
@@ -84,7 +84,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     }
 
     @Override
-    public void longHoverDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+    public void longHoverDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         IMKScreen screen = getScreen();
         if (tooltip != null && screen != null){
             // tooltips are added in screen space so we need to climb the widget tree to the top.
@@ -128,7 +128,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     }
 
     @Override
-    public void drawDebugBounds(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+    public void drawDebugBounds(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         mkFill(matrixStack, getX(), getY(), getX() + getWidth(), getY() + getHeight(), getDebugColor());
     }
 
@@ -241,7 +241,7 @@ public class MKWidget extends MKAbstractGui implements IMKWidget {
     }
 
     @Override
-    public IMKWidget setTooltip(ITextComponent newTooltip) {
+    public IMKWidget setTooltip(Component newTooltip) {
         tooltip = newTooltip;
         return this;
     }
