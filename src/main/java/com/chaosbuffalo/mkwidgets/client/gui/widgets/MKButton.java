@@ -81,7 +81,7 @@ public class MKButton extends MKWidget {
     public boolean onMousePressed(Minecraft minecraft, double mouseX, double mouseY, int mouseButton) {
         if (pressedCallback != null) {
             if (pressedCallback.apply(this, mouseButton)) {
-                playPressSound(minecraft.getSoundHandler());
+                playPressSound(minecraft.getSoundManager());
                 return true;
             }
         }
@@ -103,7 +103,7 @@ public class MKButton extends MKWidget {
         if (keyCode == GLFW.GLFW_KEY_E){
             if (pressedCallback != null) {
                 if (pressedCallback.apply(this, GLFW.GLFW_MOUSE_BUTTON_1)) {
-                    playPressSound(minecraft.getSoundHandler());
+                    playPressSound(minecraft.getSoundManager());
                     return true;
                 }
             }
@@ -113,8 +113,8 @@ public class MKButton extends MKWidget {
 
     @Override
     public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        FontRenderer fontrenderer = mc.fontRenderer;
-        mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
+        FontRenderer fontrenderer = mc.font;
+        mc.getTextureManager().bind(BUTTON_TEXTURES);
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         int i = getHoverState(isHovered());
         RenderSystem.enableBlend();
@@ -151,7 +151,7 @@ public class MKButton extends MKWidget {
     }
 
     public void playPressSound(SoundHandler soundHandler) {
-        soundHandler.play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        soundHandler.play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
 }

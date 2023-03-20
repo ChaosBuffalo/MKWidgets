@@ -32,7 +32,7 @@ public class ManualAtlas {
     }
 
     public void bind(Minecraft minecraft){
-        minecraft.getTextureManager().bindTexture(textureLoc);
+        minecraft.getTextureManager().bind(textureLoc);
     }
 
     @Nullable

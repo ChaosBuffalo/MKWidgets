@@ -111,7 +111,7 @@ public class MKImage extends MKWidget {
                      int width, int height, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.disableDepthTest();
         RenderSystem.color4f(color.getRedF(), color.getBlueF(), color.getGreenF(), color.getAlphaF());
-        mc.getTextureManager().bindTexture(getImageLoc());
+        mc.getTextureManager().bind(getImageLoc());
         mkBlitUVSizeDifferent(matrixStack, getX(), getY(), getWidth(),
                 getHeight(), (float)getTexU(), (float)getTexV(), getTexWidth(), getTexHeight(), getSourceWidth(), getSourceHeight());
         RenderSystem.enableDepthTest();

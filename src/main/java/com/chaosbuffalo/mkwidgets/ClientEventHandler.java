@@ -20,8 +20,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void onEvent(InputEvent.KeyInputEvent event){
-        if (openTestUi.isPressed()){
-            Minecraft.getInstance().displayGuiScreen(new TestScreen(
+        if (openTestUi.consumeClick()){
+            Minecraft.getInstance().setScreen(new TestScreen(
                     new StringTextComponent("MK Widgets Test")));
         }
     }

@@ -389,7 +389,7 @@ public class MKScreen extends Screen implements IMKScreen {
             dragState.updateDragState(minecraft, mouseX, mouseY, this);
         }
         for (IInstruction instruction : postRenderInstructions) {
-            instruction.draw(matrixStack, getMinecraft().fontRenderer, this.width, this.height, partialTicks);
+            instruction.draw(matrixStack, getMinecraft().font, this.width, this.height, partialTicks);
         }
         postRenderInstructions.clear();
     }

@@ -23,11 +23,11 @@ public class MKText extends MKWidget {
     }
 
     public MKText(FontRenderer renderer, ITextComponent text){
-        this(renderer, text, 200, renderer.FONT_HEIGHT);
+        this(renderer, text, 200, renderer.lineHeight);
     }
 
     public MKText(FontRenderer renderer, ITextComponent text, int x, int y){
-        this(renderer, text, x, y, 200, renderer.FONT_HEIGHT);
+        this(renderer, text, x, y, 200, renderer.lineHeight);
     }
 
     public MKText(FontRenderer renderer, String text) {
@@ -35,7 +35,7 @@ public class MKText extends MKWidget {
     }
 
     public MKText(FontRenderer renderer, String text, int x, int y){
-        this(renderer, text, x, y, 200, renderer.FONT_HEIGHT);
+        this(renderer, text, x, y, 200, renderer.lineHeight);
     }
 
     public MKText(FontRenderer renderer, String text, int x, int y, int width, int height){
@@ -43,11 +43,11 @@ public class MKText extends MKWidget {
     }
 
     public MKText(FontRenderer renderer, String text, int width){
-        this(renderer, text, 0, 0, width, renderer.FONT_HEIGHT);
+        this(renderer, text, 0, 0, width, renderer.lineHeight);
     }
 
     public int getFontHeight() {
-        return fontRenderer.FONT_HEIGHT;
+        return fontRenderer.lineHeight;
     }
 
     public int getColor() {
@@ -64,7 +64,7 @@ public class MKText extends MKWidget {
         if (isCentered()) {
             this.drawCenteredStringNoDropShadow(matrixStack, this.fontRenderer,
                     formattedText,
-                    this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - this.fontRenderer.FONT_HEIGHT) / 2, color);
+                    this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - this.fontRenderer.lineHeight) / 2, color);
         } else if (isMultiline()) {
             drawStringMultiline(fontRenderer, formattedText, getX(), getY(), getWidth(), color);
         } else {
@@ -73,23 +73,23 @@ public class MKText extends MKWidget {
     }
 
     protected void drawString(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
-        font.drawText(matrixStack, text, x, y, color);
+        font.draw(matrixStack, text, x, y, color);
     }
 
     protected void drawStringShadow(FontRenderer font, MatrixStack matrixStack, ITextComponent text, float x, float y, int color) {
-        font.drawText(matrixStack, text, x, y, color);
+        font.draw(matrixStack, text, x, y, color);
     }
 
     protected void drawStringMultiline(FontRenderer font, ITextComponent text, int x, int y, int width, int color) {
-        font.func_238418_a_(text, x, y, width, color);
+        font.drawWordWrap(text, x, y, width, color);
     }
 
     public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, String string, int x, int y, int color) {
-        fontRenderer.drawString(matrixStack, string, (float)(x - fontRenderer.getStringWidth(string) / 2), (float)y, color);
+        fontRenderer.draw(matrixStack, string, (float)(x - fontRenderer.width(string) / 2), (float)y, color);
     }
 
     public void drawCenteredStringNoDropShadow(MatrixStack matrixStack, FontRenderer fontRenderer, ITextComponent string, int x, int y, int color) {
-        drawString(fontRenderer, matrixStack, string, (float)(x - fontRenderer.getStringPropertyWidth(string) / 2), (float)y, color);
+        drawString(fontRenderer, matrixStack, string, (float)(x - fontRenderer.width(string) / 2), (float)y, color);
     }
 
     public MKText setIsCentered(boolean isCentered) {
@@ -135,9 +135,9 @@ public class MKText extends MKWidget {
 
     private void updateLabel() {
         if (isMultiline()) {
-            setHeight(fontRenderer.getWordWrappedHeight(getText().getString(), getWidth()));
+            setHeight(fontRenderer.wordWrapHeight(getText().getString(), getWidth()));
         } else {
-            setHeight(fontRenderer.FONT_HEIGHT);
+            setHeight(fontRenderer.lineHeight);
         }
     }
 }

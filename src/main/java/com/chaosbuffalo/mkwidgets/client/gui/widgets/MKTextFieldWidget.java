@@ -18,7 +18,7 @@ public class MKTextFieldWidget extends MCWidgetContainer{
         super(x, y, width, height, new TextFieldWidget(font, x, y, width, height, title), true);
         TextFieldWidget wid = getContainedWidget();
         wid.setResponder(this::onTextChange);
-        wid.setValidator(this::validateText);
+        wid.setFilter(this::validateText);
     }
 
     public MKTextFieldWidget setTextChangeCallback(BiConsumer<MKTextFieldWidget, String> callback) {
@@ -32,7 +32,7 @@ public class MKTextFieldWidget extends MCWidgetContainer{
     }
 
     public String getText(){
-        return getContainedWidget().getText();
+        return getContainedWidget().getValue();
     }
 
     public MKTextFieldWidget setSubmitCallback(BiConsumer<MKTextFieldWidget, String> cb){
@@ -49,7 +49,7 @@ public class MKTextFieldWidget extends MCWidgetContainer{
     }
 
     public void setText(String text){
-        getContainedWidget().setText(text);
+        getContainedWidget().setValue(text);
     }
 
     protected void onSubmitText(String text){
@@ -72,13 +72,13 @@ public class MKTextFieldWidget extends MCWidgetContainer{
     @Override
     public void onFocus() {
         super.onFocus();
-        getContainedWidget().setFocused2(true);
+        getContainedWidget().setFocus(true);
     }
 
     @Override
     public boolean keyPressed(Minecraft minecraft, int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ENTER){
-            onSubmitText(getContainedWidget().getText());
+            onSubmitText(getContainedWidget().getValue());
             if (getScreen() != null) {
                 getScreen().setFocus(null);
             }
@@ -91,8 +91,8 @@ public class MKTextFieldWidget extends MCWidgetContainer{
     @Override
     public void onFocusLost() {
         super.onFocusLost();
-        onSubmitText(getContainedWidget().getText());
-        getContainedWidget().setSelectionPos(getContainedWidget().getCursorPosition());
-        getContainedWidget().setFocused2(false);
+        onSubmitText(getContainedWidget().getValue());
+        getContainedWidget().setHighlightPos(getContainedWidget().getCursorPosition());
+        getContainedWidget().setFocus(false);
     }
 }

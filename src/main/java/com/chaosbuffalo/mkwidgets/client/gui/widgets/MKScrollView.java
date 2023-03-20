@@ -46,7 +46,7 @@ public class MKScrollView extends MKWidget {
     }
 
     public MKScrollView(int x, int y, int width, int height, boolean clipBounds) {
-        this(x, y, width, height, Minecraft.getInstance().getMainWindow().getGuiScaleFactor(), clipBounds);
+        this(x, y, width, height, Minecraft.getInstance().getWindow().getGuiScale(), clipBounds);
     }
 
 

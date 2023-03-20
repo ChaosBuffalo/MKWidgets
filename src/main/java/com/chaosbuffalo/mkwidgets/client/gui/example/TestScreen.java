@@ -240,7 +240,7 @@ public class TestScreen extends MKScreen {
         int xPos = width / 2 - PANEL_WIDTH / 2;
         int yPos = height / 2 - PANEL_HEIGHT / 2;
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        Minecraft.getInstance().getTextureManager().bindTexture(BG_LOC);
+        Minecraft.getInstance().getTextureManager().bind(BG_LOC);
         RenderSystem.disableLighting();
         MKAbstractGui.mkBlitUVSizeSame(matrixStack, xPos, yPos, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, 512, 512);
         super.render(matrixStack, mouseX, mouseY, partialTicks);

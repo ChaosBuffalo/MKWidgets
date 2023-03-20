@@ -46,7 +46,7 @@ public class MKPercentageImage extends MKImage{
                      int mouseY, float partialTicks) {
         RenderSystem.disableDepthTest();
         RenderSystem.color4f(color.getRedF(), color.getBlueF(), color.getGreenF(), color.getAlphaF());
-        mc.getTextureManager().bindTexture(getImageLoc());
+        mc.getTextureManager().bind(getImageLoc());
         mkBlitUVSizeDifferent(matrixStack, getX(), getY(), Math.round(getWidth() * getWidthPercentage()),
                 Math.round(getHeight() * getHeightPercentage()), (float)getTexU(), (float)getTexV(),
                 Math.round(getTexWidth() * getWidthPercentage()), Math.round(getTexHeight() * getHeightPercentage()),
