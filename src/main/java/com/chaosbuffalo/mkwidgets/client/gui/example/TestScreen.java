@@ -197,6 +197,7 @@ public class TestScreen extends MKScreen {
 
 
     public MKLayout textListDemo(int xPos, int yPos) {
+        //FIXME: this isnt working like our scroll panels in core, not sure why
         MKLayout root = getRootWithTitle(xPos, yPos, "Scrollable List Demo");
         MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, true);
         root.addWidget(scrollView);
