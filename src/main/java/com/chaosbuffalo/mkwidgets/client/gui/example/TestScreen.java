@@ -213,6 +213,7 @@ public class TestScreen extends MKScreen {
             testText.setDebugColor(0x3f0000ff);
             verticalLayout.addWidget(testText);
         }
+        verticalLayout.manualRecompute();
         scrollView.addWidget(verticalLayout);
         // we need to resolve constraints so we can center scrollview content properly
         root.manualRecompute();

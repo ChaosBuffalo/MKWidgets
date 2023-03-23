@@ -47,7 +47,7 @@ A GUI Library for Minecraft, built for MK Ultra ecosystem mods.
 [[dependencies."${mod_id}"]]
     modId="minecraft"
     mandatory=true
-    versionRange="[${mc_version},${mc_version_end}]"
+    versionRange="[${mc_version},${mc_version_end})"
     ordering="NONE"
     side="BOTH"
 

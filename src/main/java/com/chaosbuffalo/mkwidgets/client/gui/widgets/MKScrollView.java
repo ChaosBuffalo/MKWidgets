@@ -198,7 +198,7 @@ public class MKScrollView extends MKWidget {
     @Override
     public void preDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         matrixStack.pushPose();
-        matrixStack.translate(getIntOffsetX() + getX(), getIntOffsetY() + getY(), 0);
+        matrixStack.translate(getIntOffsetX(), getIntOffsetY(), 0);
     }
 
 
