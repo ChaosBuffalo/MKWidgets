@@ -197,9 +197,8 @@ public class TestScreen extends MKScreen {
 
 
     public MKLayout textListDemo(int xPos, int yPos) {
-        //FIXME: this isnt working like our scroll panels in core, not sure why
         MKLayout root = getRootWithTitle(xPos, yPos, "Scrollable List Demo");
-        MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, true);
+        MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, false);
         root.addWidget(scrollView);
         scrollView.setScrollVelocity(3.0);
         root.addConstraintToWidget(StackConstraint.VERTICAL, scrollView);
@@ -215,9 +214,9 @@ public class TestScreen extends MKScreen {
             verticalLayout.addWidget(testText);
         }
         verticalLayout.manualRecompute();
-        scrollView.addWidget(verticalLayout);
         // we need to resolve constraints so we can center scrollview content properly
         root.manualRecompute();
+        scrollView.addWidget(verticalLayout);
         scrollView.centerContentX();
         scrollView.setToTop();
         addBackButton(root);
