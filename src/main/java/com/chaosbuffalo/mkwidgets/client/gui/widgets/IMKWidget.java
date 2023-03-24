@@ -3,10 +3,10 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 import com.chaosbuffalo.mkwidgets.client.gui.actions.IDragState;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -138,22 +138,22 @@ public interface IMKWidget {
         return x >= getX() && y >= getY() && x < getRight() && y < getBottom();
     }
 
-    default void preDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks)
+    default void preDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks)
     {
 
     }
 
-    default void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks)
+    default void draw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks)
     {
 
     }
 
-    default void postDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks)
+    default void postDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks)
     {
 
     }
 
-    default void longHoverDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height,
+    default void longHoverDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height,
                                int mouseX, int mouseY, float partialTicks) {
 
     }
@@ -166,7 +166,7 @@ public interface IMKWidget {
         return isVisible() && isEnabled() && isInBounds(mouseX, mouseY);
     }
 
-    default void handleLongHoverDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height,
+    default void handleLongHoverDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height,
                                      int mouseX, int mouseY, float partialTicks) {
         if (isHovered() && getHoveredTicks() > getLongHoverTicks()) {
             longHoverDraw(matrixStack, mc, x, y, width, height, mouseX, mouseY, partialTicks);
@@ -174,10 +174,10 @@ public interface IMKWidget {
     }
 
     default IMKWidget setTooltip(String newTooltip) {
-        return setTooltip(new StringTextComponent(newTooltip));
+        return setTooltip(new TextComponent(newTooltip));
     }
 
-    IMKWidget setTooltip(ITextComponent text);
+    IMKWidget setTooltip(Component text);
 
     void clearTooltip();
 
@@ -202,7 +202,7 @@ public interface IMKWidget {
 
     boolean doDrawDebugBounds();
 
-    default void drawDebugBounds(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX,
+    default void drawDebugBounds(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX,
                                  int mouseY, float partialTicks){
 
     }
@@ -228,7 +228,7 @@ public interface IMKWidget {
         onMouseHover(mc, mouseX, mouseY, partialTicks);
     }
 
-    default void drawChildren(MatrixStack matrixStack, Minecraft mc, int mouseX, int mouseY, float partialTicks){
+    default void drawChildren(PoseStack matrixStack, Minecraft mc, int mouseX, int mouseY, float partialTicks){
         for (IMKWidget child : getChildren()) {
             if (child.isVisible()) {
                 child.drawWidget(matrixStack, mc, mouseX, mouseY, partialTicks);
@@ -236,7 +236,7 @@ public interface IMKWidget {
         }
     }
 
-    default void drawWidget(MatrixStack matrixStack, Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    default void drawWidget(PoseStack matrixStack, Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         int x = getX();
         int y = getY();
         int width = getWidth();

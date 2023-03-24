@@ -7,13 +7,13 @@ import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutHorizontal;
 import com.chaosbuffalo.mkwidgets.client.gui.layouts.MKStackLayoutVertical;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.MKScreen;
 import com.chaosbuffalo.mkwidgets.client.gui.widgets.*;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class TestScreen extends MKScreen {
     private final int PANEL_WIDTH = 320;
@@ -24,7 +24,7 @@ public class TestScreen extends MKScreen {
             "textures/gui/chaosbuffalologo.png");
     private MKModal testPopup;
 
-    public TestScreen(ITextComponent title) {
+    public TestScreen(Component title) {
         super(title);
     }
 
@@ -96,7 +96,7 @@ public class TestScreen extends MKScreen {
         MKButton closePopup = new MKButton("Close Popup");
         MKText reflectText = new MKText(font, "", 200).setIsCentered(true);
         MKTextFieldWidget textInput = new MKTextFieldWidget(font, xPos, yPos, 200, 20,
-                new StringTextComponent("test input"));
+                new TextComponent("test input"));
 
         textInput.setTextChangeCallback((wid, text) -> {
             reflectText.setText(text);
@@ -198,7 +198,7 @@ public class TestScreen extends MKScreen {
 
     public MKLayout textListDemo(int xPos, int yPos) {
         MKLayout root = getRootWithTitle(xPos, yPos, "Scrollable List Demo");
-        MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, true);
+        MKScrollView scrollView = new MKScrollView(0, 0, 120, 100, false);
         root.addWidget(scrollView);
         scrollView.setScrollVelocity(3.0);
         root.addConstraintToWidget(StackConstraint.VERTICAL, scrollView);
@@ -213,9 +213,10 @@ public class TestScreen extends MKScreen {
             testText.setDebugColor(0x3f0000ff);
             verticalLayout.addWidget(testText);
         }
-        scrollView.addWidget(verticalLayout);
+        verticalLayout.manualRecompute();
         // we need to resolve constraints so we can center scrollview content properly
         root.manualRecompute();
+        scrollView.addWidget(verticalLayout);
         scrollView.centerContentX();
         scrollView.setToTop();
         addBackButton(root);
@@ -236,14 +237,13 @@ public class TestScreen extends MKScreen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int xPos = width / 2 - PANEL_WIDTH / 2;
         int yPos = height / 2 - PANEL_HEIGHT / 2;
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        Minecraft.getInstance().getTextureManager().bindTexture(BG_LOC);
-        RenderSystem.disableLighting();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BG_LOC);
         MKAbstractGui.mkBlitUVSizeSame(matrixStack, xPos, yPos, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, 512, 512);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        RenderSystem.enableLighting();
     }
 }

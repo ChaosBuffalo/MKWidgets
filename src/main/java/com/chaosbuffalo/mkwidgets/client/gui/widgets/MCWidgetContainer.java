@@ -1,15 +1,15 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.components.AbstractWidget;
 
 public class MCWidgetContainer extends MKWidget{
 
-    private final Widget mcWidget;
+    private final AbstractWidget mcWidget;
 
 
-    public MCWidgetContainer(int x, int y, int width, int height, Widget mcWidget, boolean canFocus) {
+    public MCWidgetContainer(int x, int y, int width, int height, AbstractWidget mcWidget, boolean canFocus) {
         super(x, y, width, height);
         this.mcWidget = mcWidget;
         mcWidget.x = x;
@@ -19,7 +19,7 @@ public class MCWidgetContainer extends MKWidget{
         setCanFocus(canFocus);
     }
 
-    public Widget getContainedWidget(){
+    public AbstractWidget getContainedWidget(){
         return mcWidget;
     }
 
@@ -54,8 +54,8 @@ public class MCWidgetContainer extends MKWidget{
     }
 
     @Override
-    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        mcWidget.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
+    public void draw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        mcWidget.renderButton(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override

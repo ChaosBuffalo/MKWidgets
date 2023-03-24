@@ -1,9 +1,10 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 
 public class MKPercentageImage extends MKImage{
 
@@ -42,16 +43,17 @@ public class MKPercentageImage extends MKImage{
     }
 
     @Override
-    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX,
+    public void draw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX,
                      int mouseY, float partialTicks) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.disableDepthTest();
-        RenderSystem.color4f(color.getRedF(), color.getBlueF(), color.getGreenF(), color.getAlphaF());
-        mc.getTextureManager().bindTexture(getImageLoc());
+        RenderSystem.setShaderColor(color.getRedF(), color.getBlueF(), color.getGreenF(), color.getAlphaF());
+        RenderSystem.setShaderTexture(0, getImageLoc());
         mkBlitUVSizeDifferent(matrixStack, getX(), getY(), Math.round(getWidth() * getWidthPercentage()),
                 Math.round(getHeight() * getHeightPercentage()), (float)getTexU(), (float)getTexV(),
                 Math.round(getTexWidth() * getWidthPercentage()), Math.round(getTexHeight() * getHeightPercentage()),
                 getSourceWidth(), getSourceHeight());
         RenderSystem.enableDepthTest();
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

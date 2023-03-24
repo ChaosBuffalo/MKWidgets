@@ -2,7 +2,7 @@ package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
 import com.chaosbuffalo.mkwidgets.client.gui.math.Vec2i;
 import com.chaosbuffalo.mkwidgets.client.gui.screens.IMKScreen;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
@@ -46,7 +46,7 @@ public class MKScrollView extends MKWidget {
     }
 
     public MKScrollView(int x, int y, int width, int height, boolean clipBounds) {
-        this(x, y, width, height, Minecraft.getInstance().getMainWindow().getGuiScaleFactor(), clipBounds);
+        this(x, y, width, height, Minecraft.getInstance().getWindow().getGuiScale(), clipBounds);
     }
 
 
@@ -171,14 +171,14 @@ public class MKScrollView extends MKWidget {
     public void centerContentX() {
         if (getChildren().size() > 0) {
             IMKWidget child = this.getChildren().getFirst();
-            setOffsetX(getWidth() / 2.0 - child.getWidth() / 2.0 + getX());
+            setOffsetX(getWidth() / 2.0 - child.getWidth() / 2.0);
         }
     }
 
     public void centerContentY() {
         if (getChildren().size() > 0) {
             IMKWidget child = this.getChildren().getFirst();
-            setOffsetX(getHeight() / 2.0 - child.getHeight() / 2.0 + getY());
+            setOffsetY(getHeight() / 2.0 - child.getHeight() / 2.0);
         }
     }
 
@@ -196,10 +196,14 @@ public class MKScrollView extends MKWidget {
     }
 
     @Override
-    public void draw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
-        GL11.glPushMatrix();
-        GL11.glTranslatef(getIntOffsetX(), getIntOffsetY(), 0);
+    public void preDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+        matrixStack.pushPose();
+        matrixStack.translate(getIntOffsetX(), getIntOffsetY(), 0);
+    }
 
+
+    @Override
+    public void draw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         if (isClipBoundsEnabled()) {
             int y1 = screenHeight - y - height - 1;
             RenderSystem.enableScissor((int) Math.round(x * scaleFactor), (int) Math.round(y1 * scaleFactor),
@@ -224,11 +228,11 @@ public class MKScrollView extends MKWidget {
     }
 
     @Override
-    public void postDraw(MatrixStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
+    public void postDraw(PoseStack matrixStack, Minecraft mc, int x, int y, int width, int height, int mouseX, int mouseY, float partialTicks) {
         if (isClipBoundsEnabled()) {
             RenderSystem.disableScissor();
         }
-        GL11.glPopMatrix();
+        matrixStack.popPose();
         if (shouldDrawScrollbars()) {
             IMKWidget child = getChild();
             if (child == null) {
@@ -281,7 +285,7 @@ public class MKScrollView extends MKWidget {
     }
 
     @Override
-    public void drawChildren(MatrixStack matrixStack, Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void drawChildren(PoseStack matrixStack, Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         for (IMKWidget child : getChildren()) {
             if (child.isVisible()) {
                 child.drawWidget(matrixStack, mc, mouseX - getIntOffsetX(), mouseY - getIntOffsetY(), partialTicks);
