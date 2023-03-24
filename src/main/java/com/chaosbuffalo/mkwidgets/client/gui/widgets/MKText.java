@@ -1,10 +1,15 @@
 package com.chaosbuffalo.mkwidgets.client.gui.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.FormattedCharSequence;
 
 public class MKText extends MKWidget {
 
@@ -66,7 +71,7 @@ public class MKText extends MKWidget {
                     formattedText,
                     this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - this.fontRenderer.lineHeight) / 2, color);
         } else if (isMultiline()) {
-            drawStringMultiline(fontRenderer, formattedText, getX(), getY(), getWidth(), color);
+            drawStringMultiline(fontRenderer, matrixStack, formattedText, getX(), getY(), getWidth(), color);
         } else {
             drawString(fontRenderer, matrixStack, formattedText, getX(), getY(), color);
         }
@@ -80,8 +85,22 @@ public class MKText extends MKWidget {
         font.draw(matrixStack, text, x, y, color);
     }
 
-    protected void drawStringMultiline(Font font, Component text, int x, int y, int width, int color) {
-        font.drawWordWrap(text, x, y, width, color);
+    private int drawInternalDuplicate(Font font, FormattedCharSequence seq, float x, float y, int color, Matrix4f mat, boolean shadow) {
+        MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+        int i = font.drawInBatch(seq, x, y, color, shadow, mat, buffer, false, 0, 15728880);
+        buffer.endBatch();
+        return i;
+    }
+
+    private void drawWordWrap(Font font, PoseStack matrixStack, FormattedText text, int x, int y, int width, int color) {
+        for(FormattedCharSequence formattedcharsequence : font.split(text, width)) {
+            drawInternalDuplicate(font, formattedcharsequence, (float)x, (float)y, color, matrixStack.last().pose(), false);
+            y += 9;
+        }
+    }
+
+    protected void drawStringMultiline(Font font, PoseStack poseStack, Component text, int x, int y, int width, int color) {
+        drawWordWrap(font, poseStack, text, x, y, width, color);
     }
 
     public void drawCenteredStringNoDropShadow(PoseStack matrixStack, Font fontRenderer, String string, int x, int y, int color) {
