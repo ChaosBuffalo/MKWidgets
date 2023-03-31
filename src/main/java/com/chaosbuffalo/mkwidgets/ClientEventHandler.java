@@ -5,10 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = MKWidgets.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
